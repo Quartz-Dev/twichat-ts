@@ -1,0 +1,43 @@
+{
+  "name": "twichat",
+  "version": "0.1.69",
+  "description": "overlay your twitch.tv chat on any app",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "eslint -c .eslintrc --ext .ts ./src",
+    "start": "npm run build && electron ./dist/src/main/main.js"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.14",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "electron": "^12.0.0",
+    "eslint": "^7.32.0",
+    "typescript": "^4.7.2"
+  },
+  "dependencies": {
+    "@types/tmi.js": "^1.8.1",
+    "axios": "^0.27.2",
+    "electron-settings": "^4.0.2",
+    "electron-window-state": "^5.0.3",
+    "iohook": "^0.9.3",
+    "jquery": "^3.6.0",
+    "tmi.js": "^1.8.5"
+  },
+  "iohook": {
+    "targets": [
+      "node-87",
+      "electron-87"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  }
+}

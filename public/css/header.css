@@ -1,0 +1,84 @@
+  .app-header {
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    background-color: #232229;
+    -webkit-app-region: drag;
+  }
+  
+  .app-header h1 {
+    font-style: normal;
+    font-weight: normal;
+    color: #8d8d8d;
+    font-size: 14px;
+    flex-grow: 1;
+    cursor: inherit;
+    padding-bottom: 2px;
+  }
+
+  .app-header img, .app-header h1 {
+    padding-left: 9px;
+    margin: 0;
+    user-select: none;
+    vertical-align: middle;
+  }
+
+
+
+  .window-controls-group {
+    display: flex;
+    z-index: 1001;
+    margin-left: auto;
+    -webkit-app-region: no-drag;
+  }
+  .window-control {
+    background-color: transparent;
+    transition: background 0.15s ease-in-out;
+  }
+  .window-control:hover,
+  .window-control:active {
+    background-color: #464646;
+  }
+  .window-control:before {
+    display: block;
+    content: '';
+    width: 30px;
+    height: 30px;
+    mask: url('../img/window_minimize.svg') center center no-repeat;
+    -webkit-mask: url('../img/window_minimize.svg') center center no-repeat;
+    background-color: #a8a8a8;
+    transition: inherit;
+  }
+  .window-control:hover:before,
+  .window-control:active:before {
+    background-color: #dedede;
+  }
+  .window-control-minimize:before {
+    mask-image: url('../img/window_minimize.svg');
+    -webkit-mask-image: url('../img/window_minimize.svg');
+  }
+  .window-control-maximize:before {
+    mask-image: url('../img/window_maximize.svg');
+    -webkit-mask-image: url('../img/window_maximize.svg');
+  }
+  .window-control-restore:before {
+    mask-image: url('../img/window_restore.svg');
+    -webkit-mask-image: url('../img/window_restore.svg');
+  }
+  .window-control-settings:before {
+    mask-image: url('../img/window_settings.svg');
+    -webkit-mask-image: url('../img/window_settings.svg');
+  }
+  .window-control-close:before {
+    mask-image: url('../img/window_close.svg');
+    -webkit-mask-image: url('../img/window_close.svg');
+  }
+  
+  .window-control-close:hover,
+  .window-control-close:active {
+    background-color: #a04744;
+  }
+  .window-control-close:hover:before,
+  .window-control-close:active:before {
+    background-color: #dedede;
+  }
