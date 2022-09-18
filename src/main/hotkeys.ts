@@ -1,8 +1,22 @@
-import * as ioHook from 'iohook'
+import { uIOhook, UiohookKey } from 'uiohook-napi'
 import * as settings from 'electron-settings'
 
 let regLockID: number
 let regHideID: number
+
+// uIOhook.on('keydown', (e) => {
+//     if (e.keycode === UiohookKey.Q) {
+//       console.log('Hello!')
+//     }
+  
+//     if (e.keycode === UiohookKey.Escape) {
+//       process.exit(0)
+//     }
+//   })
+  
+//   uIOhook.start()
+
+
 
 // RAW KEYCODES
 const CODE = {
@@ -103,60 +117,60 @@ export const DEFAULT_KEYMAP = {
     HIDE: [CODE['L-CTRL'], CODE['X']]
 }
 
-const toggleLockChat = () => {
-//   chat.toggleLock()
-    console.log('toggleLockChat')
-}
+// const toggleLockChat = () => {
+// //   chat.toggleLock()
+//     console.log('toggleLockChat')
+// }
 
-const toggleHideChat = () => {
-//   chat.toggleHide()
-    console.log('toggleHideChat')
-}
+// const toggleHideChat = () => {
+// //   chat.toggleHide()
+//     console.log('toggleHideChat')
+// }
 
-export const registerAll = async () => {
-    let keymap_lock = (await settings.get('hotkeys.lock')) as number[]
-    let keymap_hide = (await settings.get('hotkeys.hide')) as number[]
-    console.log(keymap_lock)
-    console.log(keymap_hide)
-    regLockID = ioHook.registerShortcut(keymap_lock, toggleLockChat)
-    // regHideID = ioHook.registerShortcut(keymap_hide, toggleHideChat)
+// export const registerAll = async () => {
+//     let keymap_lock = (await settings.get('hotkeys.lock')) as number[]
+//     let keymap_hide = (await settings.get('hotkeys.hide')) as number[]
+//     console.log(keymap_lock)
+//     console.log(keymap_hide)
+//     regLockID = ioHook.registerShortcut(keymap_lock, toggleLockChat)
+//     // regHideID = ioHook.registerShortcut(keymap_hide, toggleHideChat)
 
-    ioHook.useRawcode(true)
-    ioHook.start();
-}
+//     ioHook.useRawcode(true)
+//     ioHook.start();
+// }
 
-export const test = (debug:boolean = false) => {
+// export const test = (debug:boolean = false) => {
 
-    let key_record: number[] = []
-    ioHook.on('keydown', event => {
-        let key: number = event?.rawcode
-        console.log(key_record)
-        console.log(key)
-        if(!key_record.includes(key)) {
-            key_record.push(key)
-            if(debug) console.log(`Pressed: ${getKeyByCode(CODE, key)}`)
-            updateUI()
-        }
-    })
+//     let key_record: number[] = []
+//     ioHook.on('keydown', event => {
+//         let key: number = event?.rawcode
+//         console.log(key_record)
+//         console.log(key)
+//         if(!key_record.includes(key)) {
+//             key_record.push(key)
+//             if(debug) console.log(`Pressed: ${getKeyByCode(CODE, key)}`)
+//             updateUI()
+//         }
+//     })
 
-    ioHook.on('keyup', event => {
-        let key: number = event?.rawcode
-        let i: number = key_record.indexOf(key)
-        if(i!= -1) key_record.splice(i, 1)
-        if(debug) console.log(`Let Go: ${getKeyByCode(CODE, key)}`)
-        updateUI()
-    })
+//     ioHook.on('keyup', event => {
+//         let key: number = event?.rawcode
+//         let i: number = key_record.indexOf(key)
+//         if(i!= -1) key_record.splice(i, 1)
+//         if(debug) console.log(`Let Go: ${getKeyByCode(CODE, key)}`)
+//         updateUI()
+//     })
     
 
 
-}
+// }
 
-export const updateUI = () => {
+// export const updateUI = () => {
 
-}
+// }
 
-function getKeyByCode(KEYCODES: object, code: number) {
-    return (Object.keys(KEYCODES) as (keyof typeof KEYCODES)[]).find((code) => {
-        return KEYCODES[code] === code;
-    })
-}
+// function getKeyByCode(KEYCODES: object, code: number) {
+//     return (Object.keys(KEYCODES) as (keyof typeof KEYCODES)[]).find((code) => {
+//         return KEYCODES[code] === code;
+//     })
+// }

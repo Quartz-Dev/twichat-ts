@@ -8,19 +8,6 @@ var channelBadges: api.twitchBadgeList
 var bttvGlobalEmotes: api.bttvEmoteList
 var bttvChannelEmotes: api.bttvEmoteList
 
-export function buildLine(msg: string, context: ChatUserstate) {
-
-    // create line element
-    let newLine = document.createElement('li')
-    newLine.classList.add('message-line')
-
-       
-
-    
-    
-    return 
-}
-
 export function refreshApiData(username: string) {
 
     return new Promise( async (resolve, reject) => {
@@ -29,8 +16,7 @@ export function refreshApiData(username: string) {
     })
 
 }
-
-function handleData(data: api.Data) {
+function saveChatSettings(data: api.Data) {
 
     if(!data) return
 

@@ -37,11 +37,13 @@ const createMainWindow = () => {
   mainWindowState.manage(mainWindow)
 
   // disables right click context menu (weird hack for frameless window)
-  const WM_INITMENU = 0x0116;
-  mainWindow.hookWindowMessage(WM_INITMENU, () => {
-    mainWindow.setEnabled(false);
-    mainWindow.setEnabled(true);
-  });
+  if(process.platform == 'win32') {
+    const WM_INITMENU = 0x0116;
+    mainWindow.hookWindowMessage(WM_INITMENU, () => {
+      mainWindow.setEnabled(false);
+      mainWindow.setEnabled(true);
+    });
+  }
 
   // shows the page after electron finishes setup
   mainWindow.once('ready-to-show', () => {
@@ -60,7 +62,7 @@ const createMainWindow = () => {
   })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 app.disableHardwareAcceleration()

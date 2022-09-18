@@ -21,23 +21,8 @@
     "axios": "^0.27.2",
     "electron-settings": "^4.0.2",
     "electron-window-state": "^5.0.3",
-    "iohook": "^0.9.3",
     "jquery": "^3.6.0",
-    "tmi.js": "^1.8.5"
-  },
-  "iohook": {
-    "targets": [
-      "node-87",
-      "electron-87"
-    ],
-    "platforms": [
-      "win32",
-      "darwin",
-      "linux"
-    ],
-    "arches": [
-      "x64",
-      "ia32"
-    ]
+    "tmi.js": "^1.8.5",
+    "uiohook-napi": "^1.5.0"
   }
 }

@@ -67,11 +67,13 @@ var createMainWindow = function () {
     // remembers window state when closing/reopening apps
     mainWindowState.manage(mainWindow);
     // disables right click context menu (weird hack for frameless window)
-    var WM_INITMENU = 0x0116;
-    mainWindow.hookWindowMessage(WM_INITMENU, function () {
-        mainWindow.setEnabled(false);
-        mainWindow.setEnabled(true);
-    });
+    if (process.platform == 'win32') {
+        var WM_INITMENU = 0x0116;
+        mainWindow.hookWindowMessage(WM_INITMENU, function () {
+            mainWindow.setEnabled(false);
+            mainWindow.setEnabled(true);
+        });
+    }
     // shows the page after electron finishes setup
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();
@@ -85,7 +87,7 @@ var createMainWindow = function () {
         electron_1.app.quit();
     });
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 };
 electron_1.app.disableHardwareAcceleration();
 electron_1.app.on("ready", function () {

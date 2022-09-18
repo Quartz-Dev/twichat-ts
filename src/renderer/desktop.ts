@@ -1,6 +1,13 @@
 import { ipcRenderer, remote } from "electron"
-import { channels } from '../shared/constants'
+// import { channels } from '../shared/constants'
 import * as $ from 'jquery'
+
+const channels = {
+    APP_NFO: 'app-info',
+    UPDATE_CHAT: 'update-chat',
+    CLOSE_APP: 'close',
+    MINIMIZE_APP: 'minimize'
+};
 
 const sendClose = () => {
     console.log('sendingClose')
