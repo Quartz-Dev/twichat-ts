@@ -40,17 +40,20 @@ const scrollDown = () => {
     tempPauseScroll()
 }
 
-
 var globalTwitchBadges: api.twitchBadgeList
 var channelTwitchBadges: api.twitchBadgeList
 var globalBTTVEmotes: api.bttvEmoteList
 var channelBTTVEmotes: api.bttvEmoteList
+var channelFFZEmotes: api.bttvEmoteList
+var mutedUsers: string[]
 
-const updateBadgesEmotes = (event: any, _globalTwitchBadges: api.twitchBadgeList, _channelTwitchBadges: api.twitchBadgeList, _globalBTTVEmotes: api.bttvEmoteList, _channelBTTVEmotes: api.bttvEmoteList) => {
+const updateBadgesEmotesMuted = (event: any, _globalTwitchBadges: api.twitchBadgeList, _channelTwitchBadges: api.twitchBadgeList, _globalBTTVEmotes: api.bttvEmoteList, _channelBTTVEmotes: api.bttvEmoteList, _channelFFZEmotes: api.bttvEmoteList, _mutedUsers: string[]) => {
     globalTwitchBadges = _globalTwitchBadges
     channelTwitchBadges = _channelTwitchBadges
     globalBTTVEmotes = _globalBTTVEmotes
     channelBTTVEmotes = _channelBTTVEmotes
+    channelFFZEmotes = _channelFFZEmotes
+    mutedUsers = _mutedUsers
     clear()
 }
 
@@ -159,6 +162,17 @@ const buildBTTVHTML = (emoteId: string) => {
     return img
 }
 
+const buildFFZHTML = (emoteId: string) => {
+    var emoteLink = `https://cdn.betterttv.net/frankerfacez_emote/${emoteId}/1`
+
+    var img = document.createElement('img')
+    img.classList.add('emote')
+
+    img.src = emoteLink
+
+    return img
+}
+
 const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUserstate) => {
 
     var emotes = context['emotes']
@@ -179,6 +193,7 @@ const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUse
     splitMsg.forEach(function (word) {
 
         let ChannelBTTVExists = (channelBTTVEmotes != null)
+        let ChannelFFZExists = (channelFFZEmotes != null)
         let GlobalBTTVExists = (globalBTTVEmotes != null)
 
         if (emoteNames[word]) { // regular emote
@@ -208,7 +223,15 @@ const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUse
             let img = buildBTTVHTML(globalBTTVEmotes[word])
             messageHTML.append(img)
 
-        } else { // not an emote
+        } else if(ChannelFFZExists && channelFFZEmotes[word]) {
+            if (workingMsg) {
+                span = buildTextHTML(workingMsg)
+                messageHTML.append(span)
+                workingMsg = ""
+            }
+            let img = buildFFZHTML(channelFFZEmotes[word])
+            messageHTML.append(img)
+        }else { // not an emote
             workingMsg += word + " "
         }
     })
@@ -234,6 +257,8 @@ const buildMessage = (msg: string, context: any) => {
 }
 
 const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
+
+    if(mutedUsers.includes(context['display-name'])) return
 
     chatBox = (document.getElementById('chat-box')) as HTMLDivElement
 
@@ -297,7 +322,7 @@ window.api.receive('scrollUp', scrollUp)
 window.api.receive('scrollDown', scrollDown)
 window.api.receive('addLine', addLine)
 window.api.receive('clear', clear)
-window.api.receive('updateBadgesEmotes', updateBadgesEmotes)
+window.api.receive('updateBadgesEmotesMuted', updateBadgesEmotesMuted)
 window.api.receive('loadSettings', loadSettings)
 window.api.receive('setFontSize', setFontSize)
 window.api.receive('setOpacity', setOpacity)

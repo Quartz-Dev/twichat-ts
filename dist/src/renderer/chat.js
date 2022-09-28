@@ -72,11 +72,13 @@ var globalTwitchBadges;
 var channelTwitchBadges;
 var globalBTTVEmotes;
 var channelBTTVEmotes;
-var updateBadgesEmotes = function (event, _globalTwitchBadges, _channelTwitchBadges, _globalBTTVEmotes, _channelBTTVEmotes) {
+var channelFFZEmotes;
+var updateBadgesEmotes = function (event, _globalTwitchBadges, _channelTwitchBadges, _globalBTTVEmotes, _channelBTTVEmotes, _channelFFZEmotes) {
     globalTwitchBadges = _globalTwitchBadges;
     channelTwitchBadges = _channelTwitchBadges;
     globalBTTVEmotes = _globalBTTVEmotes;
     channelBTTVEmotes = _channelBTTVEmotes;
+    channelFFZEmotes = _channelFFZEmotes;
     clear();
 };
 var chatBox;
@@ -161,6 +163,13 @@ var buildBTTVHTML = function (emoteId) {
     img.src = emoteLink;
     return img;
 };
+var buildFFZHTML = function (emoteId) {
+    var emoteLink = "https://cdn.betterttv.net/frankerfacez_emote/".concat(emoteId, "/1");
+    var img = document.createElement('img');
+    img.classList.add('emote');
+    img.src = emoteLink;
+    return img;
+};
 var parseEmotes = function (messageHTML, msg, context) {
     var emotes = context['emotes'];
     var span;
@@ -175,6 +184,7 @@ var parseEmotes = function (messageHTML, msg, context) {
     var workingMsg = " ";
     splitMsg.forEach(function (word) {
         var ChannelBTTVExists = (channelBTTVEmotes != null);
+        var ChannelFFZExists = (channelFFZEmotes != null);
         var GlobalBTTVExists = (globalBTTVEmotes != null);
         if (emoteNames[word]) { // regular emote
             if (workingMsg) {
@@ -201,6 +211,15 @@ var parseEmotes = function (messageHTML, msg, context) {
                 workingMsg = "";
             }
             var img = buildBTTVHTML(globalBTTVEmotes[word]);
+            messageHTML.append(img);
+        }
+        else if (ChannelFFZExists && channelFFZEmotes[word]) {
+            if (workingMsg) {
+                span = buildTextHTML(workingMsg);
+                messageHTML.append(span);
+                workingMsg = "";
+            }
+            var img = buildFFZHTML(channelFFZEmotes[word]);
             messageHTML.append(img);
         }
         else { // not an emote

@@ -154,9 +154,16 @@ const updateFadeDelay = (event: any, fadeDelay: number) => {
     settings.set('chat.fade', fadeDelay)
 }
 
+const handleCMDS = (cmd: string) => {
+    console.log(cmd)
+}
+
 const setChannel = async (event: any, username: string) => {
     console.log('Recieved setChannel from desktop app')
     console.log(`>> Data: ${username}`)
+
+    if(username.startsWith('/')) return handleCMDS(username)
+
     twitch.connect(username, chatWindow.webContents, mainWebContents)
 }
 

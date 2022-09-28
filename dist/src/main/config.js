@@ -56,7 +56,8 @@ var defaults = {
         id: '152928496',
         pfp: 'https://static-cdn.jtvnw.net/jtv_user_pictures/6883a9fc-5f73-41d9-a1f1-1547df43fd82-profile_image-300x300.png',
         emotes: {
-            bttv: {}
+            bttv: {},
+            ffz: {}
         },
         badges: {
             twitch: {}
@@ -161,14 +162,17 @@ function saveChatSettings(data) {
                     return [4 /*yield*/, settings.set('channel.emotes.bttv', data.emotes.bttv.channel)];
                 case 5:
                     _a.sent();
-                    return [4 /*yield*/, settings.set('channel.badges.twitch', data.badges.channel)];
+                    return [4 /*yield*/, settings.set('channel.emotes.ffz', data.emotes.ffz.channel)];
                 case 6:
                     _a.sent();
-                    return [4 /*yield*/, settings.set('global.badges.twitch', (data.badges.global))];
+                    return [4 /*yield*/, settings.set('channel.badges.twitch', data.badges.channel)];
                 case 7:
                     _a.sent();
-                    return [4 /*yield*/, settings.set('global.emotes.bttv', data.emotes.bttv.global)];
+                    return [4 /*yield*/, settings.set('global.badges.twitch', (data.badges.global))];
                 case 8:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('global.emotes.bttv', data.emotes.bttv.global)];
+                case 9:
                     _a.sent();
                     return [2 /*return*/];
             }

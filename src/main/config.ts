@@ -19,7 +19,8 @@ const defaults: any = {
         id: '152928496',
         pfp: 'https://static-cdn.jtvnw.net/jtv_user_pictures/6883a9fc-5f73-41d9-a1f1-1547df43fd82-profile_image-300x300.png',
         emotes: {
-            bttv: {}
+            bttv: {},
+            ffz: {}
         },
         badges: {
             twitch: {}
@@ -37,7 +38,8 @@ const defaults: any = {
         size: 18,
         opacity: 1,
         fade: 0,
-        locked: false
+        locked: false,
+        muted: []
     }
 }
 
@@ -87,6 +89,7 @@ async function saveChatSettings(data: api.Data) {
     await settings.set('channel.id', data.id)
     await settings.set('channel.pfp', (data.pfp).toString())
     await settings.set('channel.emotes.bttv', data.emotes.bttv.channel)
+    await settings.set('channel.emotes.ffz', data.emotes.ffz.channel)
     await settings.set('channel.badges.twitch', data.badges.channel)
     await settings.set('global.badges.twitch', (data.badges.global))
     await settings.set('global.emotes.bttv', data.emotes.bttv.global)
