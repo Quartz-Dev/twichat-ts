@@ -1,17 +1,18 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from "electron"
 import * as path from "path";
 import * as windowStateKeeper from "electron-window-state"
-import * as hotkeys from './hotkeys'
-import * as twitch from './twitch';
+import Hotkeys from './hotkeys'
+import * as chat from './chat_window';
 import * as config from './config'
 import { channels } from '../shared/constants'
+import { uIOhook, UiohookKey } from 'uiohook-napi'
 
 let mainWindow: BrowserWindow
 
 const createMainWindow = () => {
   // Create the browser window
-
   let mainWindowState = windowStateKeeper({
+    file: 'desktop-window-state.json',
     defaultWidth: 300,
     defaultHeight: 450
   })
@@ -28,8 +29,7 @@ const createMainWindow = () => {
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false,
-      enableRemoteModule: true
+      contextIsolation: false
     }
   });
 
@@ -37,13 +37,9 @@ const createMainWindow = () => {
   mainWindowState.manage(mainWindow)
 
   // disables right click context menu (weird hack for frameless window)
-  if(process.platform == 'win32') {
-    const WM_INITMENU = 0x0116;
-    mainWindow.hookWindowMessage(WM_INITMENU, () => {
-      mainWindow.setEnabled(false);
-      mainWindow.setEnabled(true);
-    });
-  }
+  mainWindow.on("system-context-menu", (event, _point) => {
+    event.preventDefault();
+  });
 
   // shows the page after electron finishes setup
   mainWindow.once('ready-to-show', () => {
@@ -54,28 +50,33 @@ const createMainWindow = () => {
   mainWindow.setResizable(false)
 
   // loads main page of the app
-  mainWindow.loadFile(path.join(__dirname, '../../../public/html/index.html'));
+  mainWindow.loadFile(path.join(__dirname, '../../../public/html/desktop.html'))
   
   // closes app
-  mainWindow.on('close', function(){
+  mainWindow.on('close', async function(event){
     app.quit()
   })
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
-app.disableHardwareAcceleration()
-
-
+// app.disableHardwareAcceleration()
 
 app.on("ready", async function () {
+  
   createMainWindow()
-  await config.setup(true)
+  chat.launch()
 
-  // hotkeys.registerAll()
-  // hotkeys.test()
-  // twitch.connect('roselol')
+  let hotkeys = new Hotkeys()
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Z], chat.toggleLock)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.X], chat.toggleShow)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowUp], chat.scrollUp)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowDown], chat.scrollDown)
+
+  hotkeys.run()
+
+  await config.setup(true)
 
 });
 
@@ -86,9 +87,11 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.handle(channels.CLOSE_APP, () => {
+  chat.close()
   app.quit()
 })
 
 ipcMain.handle(channels.MINIMIZE_APP, () => {
   mainWindow.minimize()
 })
+
