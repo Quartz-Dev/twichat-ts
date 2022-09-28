@@ -75,7 +75,8 @@ var defaults = {
         size: 18,
         opacity: 1,
         fade: 0,
-        locked: false
+        locked: false,
+        muted: []
     }
 };
 // ran on app start

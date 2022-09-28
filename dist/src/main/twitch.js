@@ -57,7 +57,7 @@ var msgHandler = function (channel, context, msg, self) {
 };
 exports.msgHandler = msgHandler;
 var connect = function (username, _chatWebContents, _mainWebContetnts) { return __awaiter(void 0, void 0, void 0, function () {
-    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, channelname, pfp;
+    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers, channelname, pfp;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -87,15 +87,18 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
                 return [4 /*yield*/, settings.get('channel.emotes.ffz')];
             case 8:
                 channelFFZEmotes = _a.sent();
-                return [4 /*yield*/, settings.get('channel.displayname')];
+                return [4 /*yield*/, settings.get('chat.muted')];
             case 9:
+                mutedUsers = _a.sent();
+                return [4 /*yield*/, settings.get('channel.displayname')];
+            case 10:
                 channelname = _a.sent();
                 return [4 /*yield*/, settings.get('channel.pfp')];
-            case 10:
+            case 11:
                 pfp = _a.sent();
                 _mainWebContetnts.send('updateChannelUI', channelname, pfp);
                 chatWebContents = _chatWebContents;
-                chatWebContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes);
+                chatWebContents.send('updateBadgesEmotesMuted', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers);
                 client = new tmi.Client({
                     channels: [username]
                 });

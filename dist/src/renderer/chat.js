@@ -73,12 +73,14 @@ var channelTwitchBadges;
 var globalBTTVEmotes;
 var channelBTTVEmotes;
 var channelFFZEmotes;
-var updateBadgesEmotes = function (event, _globalTwitchBadges, _channelTwitchBadges, _globalBTTVEmotes, _channelBTTVEmotes, _channelFFZEmotes) {
+var mutedUsers;
+var updateBadgesEmotesMuted = function (event, _globalTwitchBadges, _channelTwitchBadges, _globalBTTVEmotes, _channelBTTVEmotes, _channelFFZEmotes, _mutedUsers) {
     globalTwitchBadges = _globalTwitchBadges;
     channelTwitchBadges = _channelTwitchBadges;
     globalBTTVEmotes = _globalBTTVEmotes;
     channelBTTVEmotes = _channelBTTVEmotes;
     channelFFZEmotes = _channelFFZEmotes;
+    mutedUsers = _mutedUsers;
     clear();
 };
 var chatBox;
@@ -245,6 +247,10 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                if (mutedUsers.includes(context['display-name']))
+                    return [2 /*return*/];
+                if (mutedUsers.includes(context['username']))
+                    return [2 /*return*/];
                 chatBox = (document.getElementById('chat-box'));
                 newLine = buildLine();
                 return [4 /*yield*/, buildBadges(context['badges'])];
@@ -295,7 +301,7 @@ window.api.receive('scrollUp', scrollUp);
 window.api.receive('scrollDown', scrollDown);
 window.api.receive('addLine', addLine);
 window.api.receive('clear', clear);
-window.api.receive('updateBadgesEmotes', updateBadgesEmotes);
+window.api.receive('updateBadgesEmotesMuted', updateBadgesEmotesMuted);
 window.api.receive('loadSettings', loadSettings);
 window.api.receive('setFontSize', setFontSize);
 window.api.receive('setOpacity', setOpacity);

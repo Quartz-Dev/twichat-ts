@@ -259,6 +259,7 @@ const buildMessage = (msg: string, context: any) => {
 const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
 
     if(mutedUsers.includes(context['display-name'])) return
+    if(mutedUsers.includes(context['username'])) return
 
     chatBox = (document.getElementById('chat-box')) as HTMLDivElement
 
