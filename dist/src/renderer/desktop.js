@@ -18,5 +18,20 @@ var sendMinimize = function () {
     console.log('sendingMinmize');
     electron_1.ipcRenderer.invoke(channels.MINIMIZE_APP);
 };
+var openSettings = function () {
+    console.log('opening settings');
+    $('.settings-container').css('display', 'flex');
+};
+var closeSettings = function () {
+    console.log('closing settings');
+    $('.settings-container').css('display', 'none');
+};
+var toggleSettings = function () {
+    var state = $('.settings-container').css('display');
+    console.log(state);
+    state == 'flex' ? closeSettings() : openSettings();
+};
 $('#minimizeButton').on('click', sendMinimize);
+$('#settingsButton').on('click', toggleSettings);
+$('main').on('click', closeSettings);
 //# sourceMappingURL=desktop.js.map

@@ -1,4 +1,4 @@
-import { ipcRenderer, remote } from "electron"
+import { ipcRenderer } from "electron"
 // import { channels } from '../shared/constants'
 import * as $ from 'jquery'
 
@@ -19,4 +19,25 @@ const sendMinimize = () => {
     console.log('sendingMinmize')
     ipcRenderer.invoke(channels.MINIMIZE_APP)
 }
+
+const openSettings = () => {
+    console.log('opening settings')
+    $('.settings-container').css('display', 'flex')
+}
+
+const closeSettings = () => {
+    console.log('closing settings')
+    $('.settings-container').css('display', 'none')
+}
+
+const toggleSettings = () => {
+    let state = $('.settings-container').css('display')
+    console.log(state)
+    state == 'flex' ? closeSettings() : openSettings()
+}
+
 $('#minimizeButton').on('click', sendMinimize)
+
+$('#settingsButton').on('click', toggleSettings)
+
+$('main').on('click', closeSettings)

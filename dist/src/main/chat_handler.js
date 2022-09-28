@@ -36,20 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.refreshApiData = exports.buildLine = void 0;
+exports.refreshApiData = void 0;
 var api = require("./api");
 var settings = require("electron-settings");
 var globalBadges;
 var channelBadges;
 var bttvGlobalEmotes;
 var bttvChannelEmotes;
-function buildLine(msg, context) {
-    // create line element
-    var newLine = document.createElement('li');
-    newLine.classList.add('message-line');
-    return;
-}
-exports.buildLine = buildLine;
 function refreshApiData(username) {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
@@ -66,7 +59,7 @@ function refreshApiData(username) {
     }); });
 }
 exports.refreshApiData = refreshApiData;
-function handleData(data) {
+function saveChatSettings(data) {
     if (!data)
         return;
     globalBadges = data.badges.global;

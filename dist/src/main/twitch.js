@@ -38,8 +38,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.connect = exports.msgHandler = exports.disconnect = void 0;
 var tmi = require("tmi.js");
-var chat_handler_1 = require("./chat_handler");
+var config_1 = require("./config");
+var settings = require("electron-settings");
 var client;
+var webContents;
 var disconnect = function () {
     if (!client)
         return;
@@ -47,16 +49,18 @@ var disconnect = function () {
     return client.disconnect();
 };
 exports.disconnect = disconnect;
-var chatWindow;
 //  (channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean)
-var msgHandler = function (target, context, msg, self) {
-    // if(chatWindow) chatWindow.webContents.send(channels.UPDATE_CHAT, )
+var msgHandler = function (channel, context, msg, self) {
+    if (webContents)
+        webContents.send('addLine', msg, context);
 };
 exports.msgHandler = msgHandler;
-var connect = function (username) { return __awaiter(void 0, void 0, void 0, function () {
+var connect = function (username, _webContents) { return __awaiter(void 0, void 0, void 0, function () {
+    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                console.log(" >>> Attempting to connect to: ".concat(username));
                 if (!username)
                     return [2 /*return*/];
                 if (!client) return [3 /*break*/, 2];
@@ -64,8 +68,33 @@ var connect = function (username) { return __awaiter(void 0, void 0, void 0, fun
             case 1:
                 _a.sent();
                 _a.label = 2;
-            case 2:
-                (0, chat_handler_1.refreshApiData)(username);
+            case 2: return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
+            case 3:
+                _a.sent();
+                return [4 /*yield*/, settings.get('global.badges.twitch')];
+            case 4:
+                globalTwitchBadges = _a.sent();
+                return [4 /*yield*/, settings.get('channel.badges.twitch')];
+            case 5:
+                channelTwitchBadges = _a.sent();
+                return [4 /*yield*/, settings.get('global.emotes.bttv')];
+            case 6:
+                globalBTTVEmotes = _a.sent();
+                return [4 /*yield*/, settings.get('channel.emotes.bttv')];
+            case 7:
+                channelBTTVEmotes = _a.sent();
+                webContents = _webContents;
+                webContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes);
+                client = new tmi.Client({
+                    channels: [username]
+                });
+                client.on('connected', function (addr, port) {
+                    console.log(" >>> tmi.js conncted to ".concat(addr, ":").concat(port));
+                });
+                client.on('message', exports.msgHandler);
+                // Connects to twitch channel:
+                console.log(" >>>  Connecting to '".concat(username, "'"));
+                client.connect();
                 return [2 /*return*/];
         }
     });

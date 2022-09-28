@@ -36,9 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.setup = void 0;
+exports.refreshApiData = exports.setup = void 0;
 var settings = require("electron-settings");
-var hotkeys_1 = require("./hotkeys");
+// import { DEFAULT_KEYMAP } from './hotkeys'
 var settingsConfig = {
     atomicSave: true,
     fileName: 'twichat-settings.json',
@@ -47,8 +47,8 @@ var settingsConfig = {
 };
 var defaults = {
     hotkeys: {
-        lock: hotkeys_1.DEFAULT_KEYMAP.LOCK,
-        hide: hotkeys_1.DEFAULT_KEYMAP.HIDE
+    // lock: DEFAULT_KEYMAP.LOCK,
+    // hide: DEFAULT_KEYMAP.HIDE
     },
     channel: {
         username: 'roselol',
@@ -119,4 +119,60 @@ var setup = function (debug) {
     }); });
 };
 exports.setup = setup;
+var api = require("./api");
+function refreshApiData(username) {
+    var _this = this;
+    return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+        var data;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, api.fetchData(username)];
+                case 1:
+                    data = (_a.sent());
+                    return [4 /*yield*/, saveChatSettings(data)];
+                case 2:
+                    _a.sent();
+                    resolve(true);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+}
+exports.refreshApiData = refreshApiData;
+function saveChatSettings(data) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!data)
+                        return [2 /*return*/];
+                    return [4 /*yield*/, settings.set('channel.username', data.username)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('channel.displayname', data.displayname)];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('channel.id', data.id)];
+                case 3:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('channel.pfp', (data.pfp).toString())];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('channel.emotes.bttv', data.emotes.bttv.channel)];
+                case 5:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('channel.badges.twitch', data.badges.channel)];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('global.badges.twitch', (data.badges.global))];
+                case 7:
+                    _a.sent();
+                    return [4 /*yield*/, settings.set('global.emotes.bttv', data.emotes.bttv.global)];
+                case 8:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
 //# sourceMappingURL=config.js.map

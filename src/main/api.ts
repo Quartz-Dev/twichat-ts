@@ -20,7 +20,6 @@ export function fetchData(username: string) {
 
 export type emoteID = string
 export type twitchBadge = {
-    name: {
         versions: {
             [versionNumber: string] : {
                 image_url_1x: string,
@@ -33,7 +32,6 @@ export type twitchBadge = {
                 last_updated: null
             }
         }
-    }
 }
 
 export type twitchBadgeList = {

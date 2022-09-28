@@ -1,8 +1,10 @@
-import { BrowserWindow } from 'electron'
+import { WebContents } from 'electron'
 import * as tmi from 'tmi.js'
-import { buildLine, refreshApiData } from './chat_handler'
+import { refreshApiData } from './config'
+import * as settings from 'electron-settings'
 
 var client: tmi.Client
+var webContents: WebContents
 
 export const disconnect = () => {
     if(!client) return
@@ -10,22 +12,27 @@ export const disconnect = () => {
     return client.disconnect()
 }
 
-var chatWindow: BrowserWindow
-
 //  (channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean)
-export const msgHandler = (target: string, context: tmi.ChatUserstate, msg: string, self: boolean) => {
+export const msgHandler = (channel: string, context: tmi.ChatUserstate, msg: string, self: boolean) => {
 
-    // if(chatWindow) chatWindow.webContents.send(channels.UPDATE_CHAT, )
+    if(webContents) webContents.send('addLine', msg, context)
 }
 
-export const connect = async (username: string) => {
+export const connect = async (username: string, _webContents: WebContents) => {
+    console.log(` >>> Attempting to connect to: ${username}`)
     if(!username) return
 
     if(client) await disconnect()
 
-    refreshApiData(username)
+    await refreshApiData(username)
 
-    return
+    let globalTwitchBadges = await settings.get('global.badges.twitch')
+    let channelTwitchBadges = await settings.get('channel.badges.twitch')
+    let globalBTTVEmotes = await settings.get('global.emotes.bttv')
+    let channelBTTVEmotes = await settings.get('channel.emotes.bttv')
+
+    webContents = _webContents
+    webContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes)
 
     client = new tmi.Client({
         channels: [username]
@@ -36,4 +43,8 @@ export const connect = async (username: string) => {
     })
 
     client.on('message', msgHandler)
+
+    // Connects to twitch channel:
+    console.log(` >>>  Connecting to '${username}'`)
+    client.connect();
 }

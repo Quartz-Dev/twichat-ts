@@ -1,5 +1,5 @@
 import * as settings from 'electron-settings'
-import { DEFAULT_KEYMAP } from './hotkeys'
+// import { DEFAULT_KEYMAP } from './hotkeys'
 
 const settingsConfig: any = { 
     atomicSave: true,
@@ -10,8 +10,8 @@ const settingsConfig: any = {
 
 const defaults: any = {
     hotkeys: {
-        lock: DEFAULT_KEYMAP.LOCK,
-        hide: DEFAULT_KEYMAP.HIDE
+        // lock: DEFAULT_KEYMAP.LOCK,
+        // hide: DEFAULT_KEYMAP.HIDE
     },
     channel: {
         username: 'roselol',
@@ -66,3 +66,28 @@ export const setup = (debug=false) => {
     })
 }
 
+import * as api from './api'
+
+export function refreshApiData(username: string) {
+
+    return new Promise( async (resolve, reject) => {
+        let data = (await api.fetchData(username)) as api.Data
+        await saveChatSettings(data)
+        resolve(true)
+    })
+
+}
+
+async function saveChatSettings(data: api.Data) {
+
+    if(!data) return
+
+    await settings.set('channel.username', data.username)
+    await settings.set('channel.displayname', data.displayname)
+    await settings.set('channel.id', data.id)
+    await settings.set('channel.pfp', (data.pfp).toString())
+    await settings.set('channel.emotes.bttv', data.emotes.bttv.channel)
+    await settings.set('channel.badges.twitch', data.badges.channel)
+    await settings.set('global.badges.twitch', (data.badges.global))
+    await settings.set('global.emotes.bttv', data.emotes.bttv.global)
+}

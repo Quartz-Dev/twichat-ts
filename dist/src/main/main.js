@@ -39,12 +39,16 @@ exports.__esModule = true;
 var electron_1 = require("electron");
 var path = require("path");
 var windowStateKeeper = require("electron-window-state");
+var hotkeys_1 = require("./hotkeys");
+var chat = require("./chat/chat_window");
 var config = require("./config");
 var constants_1 = require("../shared/constants");
+var uiohook_napi_1 = require("uiohook-napi");
 var mainWindow;
 var createMainWindow = function () {
     // Create the browser window
     var mainWindowState = windowStateKeeper({
+        file: 'desktop-window-state.json',
         defaultWidth: 300,
         defaultHeight: 450
     });
@@ -60,20 +64,15 @@ var createMainWindow = function () {
         webPreferences: {
             preload: path.join(electron_1.app.getAppPath(), 'preload.js'),
             nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true
+            contextIsolation: false
         }
     });
     // remembers window state when closing/reopening apps
     mainWindowState.manage(mainWindow);
     // disables right click context menu (weird hack for frameless window)
-    if (process.platform == 'win32') {
-        var WM_INITMENU = 0x0116;
-        mainWindow.hookWindowMessage(WM_INITMENU, function () {
-            mainWindow.setEnabled(false);
-            mainWindow.setEnabled(true);
-        });
-    }
+    mainWindow.on("system-context-menu", function (event, _point) {
+        event.preventDefault();
+    });
     // shows the page after electron finishes setup
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();
@@ -81,26 +80,35 @@ var createMainWindow = function () {
     // disables resizing of window
     mainWindow.setResizable(false);
     // loads main page of the app
-    mainWindow.loadFile(path.join(__dirname, '../../../public/html/index.html'));
+    mainWindow.loadFile(path.join(__dirname, '../../../public/html/desktop.html'));
     // closes app
-    mainWindow.on('close', function () {
-        electron_1.app.quit();
+    mainWindow.on('close', function (event) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                electron_1.app.quit();
+                return [2 /*return*/];
+            });
+        });
     });
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 };
-electron_1.app.disableHardwareAcceleration();
+// app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
     return __awaiter(this, void 0, void 0, function () {
+        var hotkeys;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     createMainWindow();
-                    return [4 /*yield*/, config.setup(true)
-                        // hotkeys.registerAll()
-                        // hotkeys.test()
-                        // twitch.connect('roselol')
-                    ];
+                    chat.launch();
+                    hotkeys = new hotkeys_1["default"]();
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Z], chat.toggleLock);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.X], chat.toggleShow);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
+                    hotkeys.run();
+                    return [4 /*yield*/, config.setup(true)];
                 case 1:
                     _a.sent();
                     return [2 /*return*/];
@@ -114,6 +122,7 @@ electron_1.app.on("window-all-closed", function () {
     }
 });
 electron_1.ipcMain.handle(constants_1.channels.CLOSE_APP, function () {
+    chat.close();
     electron_1.app.quit();
 });
 electron_1.ipcMain.handle(constants_1.channels.MINIMIZE_APP, function () {
