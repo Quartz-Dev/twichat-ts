@@ -13,6 +13,11 @@ var debug: boolean = false
 
 let mainWindow: BrowserWindow
 
+const toggleDevTools = () => {
+  mainWindow.webContents.toggleDevTools()
+  chat.toggleDevTools()
+}
+
 const createMainWindow = (channelname: string, pfp: string, fontSize: number, opacity: number, fadeDelay: number, debug: boolean = false) => {
   // Create the browser window
   let mainWindowState = windowStateKeeper({
@@ -87,9 +92,9 @@ app.on("ready", async function () {
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.D], chat.toggleShow)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowUp], chat.scrollUp)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowDown], chat.scrollDown)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Slash], toggleDevTools)
 
   hotkeys.run()
-
 
 });
 

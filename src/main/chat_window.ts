@@ -97,6 +97,9 @@ export const close = () => {
     chatWindow.close()
 }
 
+export const toggleDevTools = () => {
+    chatWindow.webContents.toggleDevTools()
+}
 
 var isLocked: boolean = true
 

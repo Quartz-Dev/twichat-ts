@@ -48,6 +48,10 @@ var settings = require("electron-settings");
 // IF TRUE TURNS ON DEV TOOLS FOR BOTH WINDOWS
 var debug = false;
 var mainWindow;
+var toggleDevTools = function () {
+    mainWindow.webContents.toggleDevTools();
+    chat.toggleDevTools();
+};
 var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay, debug) {
     if (debug === void 0) { debug = false; }
     // Create the browser window
@@ -130,6 +134,7 @@ electron_1.app.on("ready", function () {
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.D], chat.toggleShow);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Slash], toggleDevTools);
                     hotkeys.run();
                     return [2 /*return*/];
             }
