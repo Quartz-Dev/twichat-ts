@@ -88,11 +88,11 @@ app.on("ready", async function () {
   chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug)
 
   let hotkeys = new Hotkeys()
-  hotkeys.register([UiohookKey.Ctrl, UiohookKey.S], chat.toggleLock)
-  hotkeys.register([UiohookKey.Ctrl, UiohookKey.D], chat.toggleShow)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Period], chat.toggleLock)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Comma], chat.toggleShow)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Slash], toggleDevTools)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowUp], chat.scrollUp)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowDown], chat.scrollDown)
-  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Slash], toggleDevTools)
 
   hotkeys.run()
 
