@@ -67,7 +67,6 @@ export const createWindow = async (fontSize: number, opacity: number, fadeDelay:
 
         // gets channel name from settings
         let channelname = (await settings.get('channel.username')) as string
-        let pfp = (await settings.get('channel.pfp')) as string
 
         // unlocks chat if needed
         isLocked = await settings.get('chat.locked') as boolean
