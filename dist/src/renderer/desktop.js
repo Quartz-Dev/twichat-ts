@@ -5,28 +5,23 @@ var channels = {
     MINIMIZE_APP: 'minimize'
 };
 var sendClose = function () {
-    console.log('sendingClose');
     window.api.send(channels.CLOSE_APP);
 };
 $('#closeButton').on('click', sendClose);
 var sendMinimize = function () {
-    console.log('sendingMinmize');
     window.api.send(channels.MINIMIZE_APP);
 };
+$('#minimizeButton').on('click', sendMinimize);
 var openSettings = function () {
-    console.log('opening settings');
     $('.settings-container').css('display', 'flex');
 };
 var closeSettings = function () {
-    console.log('closing settings');
     $('.settings-container').css('display', 'none');
 };
 var toggleSettings = function () {
     var state = $('.settings-container').css('display');
-    console.log(state);
     state == 'flex' ? closeSettings() : openSettings();
 };
-$('#minimizeButton').on('click', sendMinimize);
 $('#settingsButton').on('click', toggleSettings);
 $('main').on('click', closeSettings);
 // font size
@@ -62,12 +57,8 @@ $('#fade-delay-slider').on('input', function () {
     $('#fade-delay-text').val(fadeDelay);
     window.api.send('updateFadeDelay', fadeDelay);
 });
-var updateSettingsInputs = function (event, fontSize, opacity, fadeDelay) {
-    console.log(">> Settings");
-    console.log(fontSize);
-    console.log(opacity);
-    console.log(fadeDelay);
-    console.log("<<");
+var updateSettingsInputs = function (event, channelname, pfp, fontSize, opacity, fadeDelay) {
+    updateChannelUI(null, channelname, pfp);
     // updates font size sliders
     $('#font-size-text').val(fontSize);
     $('#font-size-slider').val(fontSize);
@@ -78,5 +69,43 @@ var updateSettingsInputs = function (event, fontSize, opacity, fadeDelay) {
     $('#fade-delay-text').val(fadeDelay);
     $('#fade-delay-slider').val(fadeDelay);
 };
+var updateChannelUI = function (event, channelname, pfp) {
+    $('#channel-name-text').val(channelname);
+    $('.pfp').attr('src', pfp);
+};
+$('#toggle-show').on('click', function () {
+    window.api.send('toggleShow');
+});
+$('#toggle-lock').on('click', function () {
+    window.api.send('toggleLock');
+});
+var updateShowSwitch = function (event, isShown) {
+    var switchState = $('#1-toggle-show').prop('checked');
+    $('#1-toggle-show').prop('checked', isShown);
+    $('#toggle-show').prop('checked', isShown);
+};
+var updateLockSwitch = function (event, isLocked) {
+    var switchState = $('#2-toggle-lock').prop('checked');
+    $('#2-toggle-lock').prop('checked', isLocked);
+};
+// when pressed enter inside channel text box
+$(".selected-channel-container").on('keyup', function (event) {
+    if (event.key == 'Enter') {
+        $('#channel-name-text').trigger('blur');
+        // this also triggers 'focusout'
+    }
+});
+// when clicking out of channel text box
+// this is also called on keyup
+$(".selected-channel-container").on('focusout', function (event) {
+    var username = $('#channel-name-text').val();
+    setChannel(username);
+});
+function setChannel(username) {
+    window.api.send('setChannel', username);
+}
 window.api.receive('settings', updateSettingsInputs);
+window.api.receive('updateShowSwitch', updateShowSwitch);
+window.api.receive('updateLockSwitch', updateLockSwitch);
+window.api.receive('updateChannelUI', updateChannelUI);
 //# sourceMappingURL=desktop.js.map

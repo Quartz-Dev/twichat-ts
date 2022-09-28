@@ -36,21 +36,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var lock = function () {
-    console.log('lock');
+var unlock = function () {
     $("body").addClass("body-unlocked");
     $("body").removeClass("body-locked");
     $('#frame').addClass("frame");
 };
-var unlock = function () {
-    console.log('unlock');
+var lock = function () {
     $("body").addClass("body-locked");
     $("body").removeClass("body-unlocked");
     $('#frame').removeClass("frame");
 };
 var toggleLock = function () {
     ($('body').hasClass("body-locked")) ? lock() : unlock();
-    console.log('toggleLock');
 };
 var scrollStep = 36;
 var scrollUp = function () {
@@ -70,6 +67,7 @@ var updateBadgesEmotes = function (event, _globalTwitchBadges, _channelTwitchBad
     channelTwitchBadges = _channelTwitchBadges;
     globalBTTVEmotes = _globalBTTVEmotes;
     channelBTTVEmotes = _channelBTTVEmotes;
+    clear();
 };
 var chatBox;
 var nonFirstTimeChatters = new Set();
@@ -260,6 +258,8 @@ var loadSettings = function (event, fontSize, opacity, fadeDelay) {
     setOpacity(null, opacity);
     setFadeDelay(null, fadeDelay);
 };
+window.api.receive('unlock', unlock);
+window.api.receive('lock', lock);
 window.api.receive('toggleLock', toggleLock);
 window.api.receive('scrollUp', scrollUp);
 window.api.receive('scrollDown', scrollDown);

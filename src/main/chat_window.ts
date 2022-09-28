@@ -4,10 +4,12 @@ import * as windowStateKeeper from "electron-window-state"
 import * as settings from 'electron-settings'
 import * as path from 'path'
 import * as twitch from './twitch'
+import { WebContents } from 'electron'
 
 let chatWindow: BrowserWindow
+let mainWebContents: WebContents
 
-export const createWindow = () => {
+export const createWindow = async (fontSize: number, opacity: number, fadeDelay: number) => {
 
     let chatWindowState = windowStateKeeper({
         file: 'chat-window-state.json',
@@ -50,8 +52,32 @@ export const createWindow = () => {
         event.preventDefault();
     });
 
-    chatWindow.once('ready-to-show', () => {
+    chatWindow.on('show', async () => {
+        // updates desktop show switch to on
+        mainWebContents.send('updateShowSwitch', true)
+    })
+
+    chatWindow.on('hide', async () => {
+        // updates desktop show switch to off
+        mainWebContents.send('updateShowSwitch', false)
+    })
+
+    chatWindow.once('ready-to-show', async () => {
         chatWindow.show()
+
+        // gets channel name from settings
+        let channelname = (await settings.get('channel.username')) as string
+        let pfp = (await settings.get('channel.pfp')) as string
+
+        // unlocks chat if needed
+        isLocked = await settings.get('chat.locked') as boolean
+        isLocked ? lock() : unlock()
+        // gets chat saved settings and sends to client
+
+        chatWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
+
+        // connects to twitch
+        twitch.connect(channelname, chatWindow.webContents, mainWebContents)
         
         //   Open the DevTools.
         chatWindow.webContents.openDevTools();
@@ -76,21 +102,23 @@ export const close = () => {
 var isLocked: boolean = true
 
 export const toggleLock = async () => {
-    chatWindow.webContents.send('toggleLock')
+    isLocked ? unlock() : lock()
 }
 
-export const unlock = () => {
-    console.log('unlocking chat window')
+export const unlock = async () => {
     isLocked = false
     chatWindow.setIgnoreMouseEvents(false)
     chatWindow.webContents.send('unlock')
+    mainWebContents.send('updateLockSwitch', isLocked)
+    await settings.set('chat.locked', false)
 }
 
-export const lock = () => {
-    console.log('locking chat window')
+export const lock = async () => {
     isLocked = true
     chatWindow.setIgnoreMouseEvents(true)
     chatWindow.webContents.send('lock')
+    mainWebContents.send('updateLockSwitch', isLocked)
+    await settings.set('chat.locked', true)
 }
 
 export const toggleShow = () => {
@@ -105,24 +133,10 @@ export const scrollDown = () => {
     chatWindow.webContents.send('scrollDown')
 }
 
-export const launch = async (fontSize: number, opacity: number, fadeDelay: number) => {
-
+export const launch = async (webContents: WebContents, fontSize: number, opacity: number, fadeDelay: number) => {
     // creates and opens chat window
-    createWindow()
-    // make sure window opens locked (no border)
-
-    // gets channel name from settings
-    let channel = (await settings.get('channel.username')) as string
-
-    // unlocks chat if needed
-    if(await settings.get('chat.locked') == false) unlock()
-
-    // gets chat saved settings and sends to client
-
-    chatWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
-
-    // connects to twitch
-    twitch.connect(channel, chatWindow.webContents)
+    mainWebContents = webContents
+    createWindow(fontSize, opacity, fadeDelay)
 }
 
 const updateFontSize = (event: any, fontSize: number) => {
@@ -132,14 +146,23 @@ const updateFontSize = (event: any, fontSize: number) => {
 
 const updateOpacity = (event: any, opacity: number) => {
     chatWindow.webContents.send('setOpacity', opacity)
-    settings.set('chat.size', opacity)
+    settings.set('chat.opacity', opacity)
 }
 
 const updateFadeDelay = (event: any, fadeDelay: number) => {
     chatWindow.webContents.send('setFadeDelay', fadeDelay)
-    settings.set('chat.size', fadeDelay)
+    settings.set('chat.fade', fadeDelay)
+}
+
+const setChannel = async (event: any, username: string) => {
+    console.log('Recieved setChannel from desktop app')
+    console.log(`>> Data: ${username}`)
+    twitch.connect(username, chatWindow.webContents, mainWebContents)
 }
 
 ipcMain.handle('updateFontSize', updateFontSize)
 ipcMain.handle('updateOpacity', updateOpacity)
 ipcMain.handle('updateFadeDelay', updateFadeDelay)
+ipcMain.handle('toggleLock', toggleLock)
+ipcMain.handle('toggleShow', toggleShow)
+ipcMain.handle('setChannel', setChannel)

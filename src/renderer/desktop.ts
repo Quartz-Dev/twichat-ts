@@ -6,35 +6,30 @@ const channels = {
 };
 
 const sendClose = () => {
-    console.log('sendingClose')
     window.api.send(channels.CLOSE_APP)
 }
 $('#closeButton').on('click', sendClose)
 
 const sendMinimize = () => {
-    console.log('sendingMinmize')
     window.api.send(channels.MINIMIZE_APP)
 }
+$('#minimizeButton').on('click', sendMinimize)
 
 const openSettings = () => {
-    console.log('opening settings')
     $('.settings-container').css('display', 'flex')
 }
 
 const closeSettings = () => {
-    console.log('closing settings')
     $('.settings-container').css('display', 'none')
 }
 
 const toggleSettings = () => {
     let state = $('.settings-container').css('display')
-    console.log(state)
     state == 'flex' ? closeSettings() : openSettings()
 }
-
-$('#minimizeButton').on('click', sendMinimize)
-
 $('#settingsButton').on('click', toggleSettings)
+
+
 
 $('main').on('click', closeSettings)
 
@@ -77,13 +72,9 @@ $('#fade-delay-slider').on('input', function() {
     window.api.send('updateFadeDelay', fadeDelay)
 })
 
-const updateSettingsInputs = (event: any, fontSize: number, opacity: number, fadeDelay: number) => {
+const updateSettingsInputs = (event: any, channelname: string, pfp: string, fontSize: number, opacity: number, fadeDelay: number) => {
 
-    console.log(">> Settings")
-    console.log(fontSize)
-    console.log(opacity)
-    console.log(fadeDelay)
-    console.log("<<")
+    updateChannelUI(null, channelname, pfp)
 
     // updates font size sliders
     $('#font-size-text').val(fontSize)
@@ -98,4 +89,50 @@ const updateSettingsInputs = (event: any, fontSize: number, opacity: number, fad
     $('#fade-delay-slider').val(fadeDelay)
 }
 
+const updateChannelUI = (event: any, channelname: string, pfp: string) => {
+    $('#channel-name-text').val(channelname)
+    $('.pfp').attr('src', pfp)
+}
+
+$('#toggle-show').on('click', function() {
+    window.api.send('toggleShow')
+})
+
+$('#toggle-lock').on('click', function() {
+    window.api.send('toggleLock')
+})
+
+const updateShowSwitch = (event: any, isShown: boolean) => {
+    let switchState = $('#1-toggle-show').prop('checked')
+    $('#1-toggle-show').prop('checked', isShown)
+    $('#toggle-show').prop('checked', isShown)
+}
+
+const updateLockSwitch = (event: any, isLocked: boolean) => {
+    let switchState = $('#2-toggle-lock').prop('checked')
+    $('#2-toggle-lock').prop('checked', isLocked)
+}
+
+// when pressed enter inside channel text box
+$(".selected-channel-container").on('keyup', function (event) {
+    if (event.key == 'Enter') {
+        $('#channel-name-text').trigger('blur')
+        // this also triggers 'focusout'
+    }
+})
+
+// when clicking out of channel text box
+// this is also called on keyup
+$(".selected-channel-container").on('focusout', function (event) {
+    let username =  $('#channel-name-text').val() as string
+    setChannel(username)
+})
+
+function setChannel(username: string) {
+    window.api.send('setChannel', username)
+}
+
 window.api.receive('settings', updateSettingsInputs)
+window.api.receive('updateShowSwitch', updateShowSwitch)
+window.api.receive('updateLockSwitch', updateLockSwitch)
+window.api.receive('updateChannelUI', updateChannelUI)

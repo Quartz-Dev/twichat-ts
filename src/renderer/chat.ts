@@ -1,15 +1,13 @@
 import { ChatUserstate, Badges } from "tmi.js";
 import * as api from '../main/api'
 
-const lock = () => {
-    console.log('lock')
+const unlock = () => {
     $(`body`).addClass("body-unlocked");
     $(`body`).removeClass("body-locked");
     $('#frame').addClass("frame");
 }
 
-const unlock = () => {
-    console.log('unlock')
+const lock = () => {
     $(`body`).addClass("body-locked");
     $(`body`).removeClass("body-unlocked");
     $('#frame').removeClass("frame");
@@ -17,7 +15,6 @@ const unlock = () => {
 
 const toggleLock = () => {
     ($('body').hasClass("body-locked")) ? lock() : unlock()
-    console.log('toggleLock')
 }
 
 const scrollStep = 36
@@ -42,6 +39,7 @@ const updateBadgesEmotes = (event: any, _globalTwitchBadges: api.twitchBadgeList
     channelTwitchBadges = _channelTwitchBadges
     globalBTTVEmotes = _globalBTTVEmotes
     channelBTTVEmotes = _channelBTTVEmotes
+    clear()
 }
 
 
@@ -279,6 +277,8 @@ const loadSettings = (event: any, fontSize: number, opacity: number, fadeDelay: 
     setFadeDelay(null, fadeDelay)
 }
 
+window.api.receive('unlock', unlock)
+window.api.receive('lock', lock)
 window.api.receive('toggleLock', toggleLock)
 window.api.receive('scrollUp', scrollUp)
 window.api.receive('scrollDown', scrollDown)

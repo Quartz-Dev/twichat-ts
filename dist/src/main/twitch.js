@@ -41,7 +41,8 @@ var tmi = require("tmi.js");
 var config_1 = require("./config");
 var settings = require("electron-settings");
 var client;
-var webContents;
+var chatWebContents;
+var mainWebContents;
 var disconnect = function () {
     if (!client)
         return;
@@ -51,12 +52,12 @@ var disconnect = function () {
 exports.disconnect = disconnect;
 //  (channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean)
 var msgHandler = function (channel, context, msg, self) {
-    if (webContents)
-        webContents.send('addLine', msg, context);
+    if (chatWebContents)
+        chatWebContents.send('addLine', msg, context);
 };
 exports.msgHandler = msgHandler;
-var connect = function (username, _webContents) { return __awaiter(void 0, void 0, void 0, function () {
-    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes;
+var connect = function (username, _chatWebContents, _mainWebContetnts) { return __awaiter(void 0, void 0, void 0, function () {
+    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelname, pfp;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -68,9 +69,12 @@ var connect = function (username, _webContents) { return __awaiter(void 0, void 
             case 1:
                 _a.sent();
                 _a.label = 2;
-            case 2: return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
+            case 2:
+                console.log('disconencted?');
+                return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
             case 3:
                 _a.sent();
+                console.log('got new data');
                 return [4 /*yield*/, settings.get('global.badges.twitch')];
             case 4:
                 globalTwitchBadges = _a.sent();
@@ -83,8 +87,16 @@ var connect = function (username, _webContents) { return __awaiter(void 0, void 
                 return [4 /*yield*/, settings.get('channel.emotes.bttv')];
             case 7:
                 channelBTTVEmotes = _a.sent();
-                webContents = _webContents;
-                webContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes);
+                return [4 /*yield*/, settings.get('channel.displayname')];
+            case 8:
+                channelname = _a.sent();
+                return [4 /*yield*/, settings.get('channel.pfp')];
+            case 9:
+                pfp = _a.sent();
+                console.log('pulled data from settings file');
+                _mainWebContetnts.send('updateChannelUI', channelname, pfp);
+                chatWebContents = _chatWebContents;
+                chatWebContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes);
                 client = new tmi.Client({
                     channels: [username]
                 });

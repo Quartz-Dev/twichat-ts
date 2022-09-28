@@ -10,7 +10,7 @@ import * as settings from 'electron-settings'
 
 let mainWindow: BrowserWindow
 
-const createMainWindow = (fontSize: number, opacity: number, fadeDelay: number) => {
+const createMainWindow = (channelname: string, pfp: string, fontSize: number, opacity: number, fadeDelay: number) => {
   // Create the browser window
   let mainWindowState = windowStateKeeper({
     file: 'desktop-window-state.json',
@@ -45,7 +45,7 @@ const createMainWindow = (fontSize: number, opacity: number, fadeDelay: number) 
   // shows the page after electron finishes setup
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
-    mainWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
+    mainWindow.webContents.send('settings', channelname, pfp, fontSize, opacity, fadeDelay)
   }) 
 
   // disables resizing of window
@@ -73,9 +73,11 @@ app.on("ready", async function () {
   let fontSize = (await settings.get('chat.size')) as number
   let opacity = (await settings.get('chat.opacity')) as number
   let fadeDelay = (await settings.get('chat.fade')) as number
+  let channelname = (await settings.get('channel.username')) as string
+  let pfp = (await settings.get('channel.pfp')) as string
   
-  createMainWindow(fontSize, opacity, fadeDelay)
-  chat.launch(fontSize, opacity, fadeDelay)
+  createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay)
+  chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay)
 
   let hotkeys = new Hotkeys()
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.S], chat.toggleLock)

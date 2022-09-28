@@ -46,7 +46,7 @@ var constants_1 = require("../shared/constants");
 var uiohook_napi_1 = require("uiohook-napi");
 var settings = require("electron-settings");
 var mainWindow;
-var createMainWindow = function (fontSize, opacity, fadeDelay) {
+var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay) {
     // Create the browser window
     var mainWindowState = windowStateKeeper({
         file: 'desktop-window-state.json',
@@ -77,7 +77,7 @@ var createMainWindow = function (fontSize, opacity, fadeDelay) {
     // shows the page after electron finishes setup
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();
-        mainWindow.webContents.send('settings', fontSize, opacity, fadeDelay);
+        mainWindow.webContents.send('settings', channelname, pfp, fontSize, opacity, fadeDelay);
     });
     // disables resizing of window
     mainWindow.setResizable(false);
@@ -98,7 +98,7 @@ var createMainWindow = function (fontSize, opacity, fadeDelay) {
 // app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
     return __awaiter(this, void 0, void 0, function () {
-        var fontSize, opacity, fadeDelay, hotkeys;
+        var fontSize, opacity, fadeDelay, channelname, pfp, hotkeys;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, config.setup(true)];
@@ -113,8 +113,14 @@ electron_1.app.on("ready", function () {
                     return [4 /*yield*/, settings.get('chat.fade')];
                 case 4:
                     fadeDelay = (_a.sent());
-                    createMainWindow(fontSize, opacity, fadeDelay);
-                    chat.launch(fontSize, opacity, fadeDelay);
+                    return [4 /*yield*/, settings.get('channel.username')];
+                case 5:
+                    channelname = (_a.sent());
+                    return [4 /*yield*/, settings.get('channel.pfp')];
+                case 6:
+                    pfp = (_a.sent());
+                    createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay);
+                    chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay);
                     hotkeys = new hotkeys_1["default"]();
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.S], chat.toggleLock);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.D], chat.toggleShow);
