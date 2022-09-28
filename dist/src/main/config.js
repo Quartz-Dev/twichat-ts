@@ -36,9 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.refreshApiData = exports.setup = void 0;
+exports.refreshApiData = exports.setup = exports.validateChannel = exports.validateHotkeys = void 0;
 var settings = require("electron-settings");
-// import { DEFAULT_KEYMAP } from './hotkeys'
 var settingsConfig = {
     atomicSave: true,
     fileName: 'twichat-settings.json',
@@ -51,10 +50,10 @@ var defaults = {
     // hide: DEFAULT_KEYMAP.HIDE
     },
     channel: {
-        username: 'roselol',
-        displayname: 'roselol',
-        id: '152928496',
-        pfp: 'https://static-cdn.jtvnw.net/jtv_user_pictures/6883a9fc-5f73-41d9-a1f1-1547df43fd82-profile_image-300x300.png',
+        username: '',
+        displayname: '',
+        id: '',
+        pfp: '',
         emotes: {
             bttv: {},
             ffz: {}
@@ -79,57 +78,125 @@ var defaults = {
         muted: []
     }
 };
+var validateHotkeys = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, settings.has('hotkeys')];
+            case 1:
+                if (!!(_a.sent())) return [3 /*break*/, 3];
+                return [4 /*yield*/, settings.set('hotkeys', defaults.hotkeys)];
+            case 2:
+                _a.sent();
+                _a.label = 3;
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.validateHotkeys = validateHotkeys;
+var validateChannel = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, settings.has('channel')];
+            case 1:
+                if (!!(_a.sent())) return [3 /*break*/, 3];
+                return [4 /*yield*/, settings.set('channel', defaults.channel)];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.validateChannel = validateChannel;
+var validateChat = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, settings.has('chat')];
+            case 1:
+                if (!!(_a.sent())) return [3 /*break*/, 3];
+                return [4 /*yield*/, settings.set('chat', defaults.chat)];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+            case 3: return [4 /*yield*/, settings.has('chat.size')];
+            case 4:
+                if (!!(_a.sent())) return [3 /*break*/, 6];
+                return [4 /*yield*/, settings.set('chat.size', defaults.chat.size)];
+            case 5:
+                _a.sent();
+                return [2 /*return*/];
+            case 6: return [4 /*yield*/, settings.has('chat.opacity')];
+            case 7:
+                if (!!(_a.sent())) return [3 /*break*/, 9];
+                return [4 /*yield*/, settings.set('chat.opacity', defaults.chat.opacity)];
+            case 8:
+                _a.sent();
+                return [2 /*return*/];
+            case 9: return [4 /*yield*/, settings.has('chat.fade')];
+            case 10:
+                if (!!(_a.sent())) return [3 /*break*/, 12];
+                return [4 /*yield*/, settings.set('chat.fade', defaults.chat.fade)];
+            case 11:
+                _a.sent();
+                return [2 /*return*/];
+            case 12: return [4 /*yield*/, settings.has('chat.locked')];
+            case 13:
+                if (!!(_a.sent())) return [3 /*break*/, 15];
+                return [4 /*yield*/, settings.set('chat.locked', defaults.chat.locked)];
+            case 14:
+                _a.sent();
+                return [2 /*return*/];
+            case 15: return [4 /*yield*/, settings.has('chat.muted')];
+            case 16:
+                if (!!(_a.sent())) return [3 /*break*/, 18];
+                return [4 /*yield*/, settings.set('chat.muted', defaults.chat.muted)];
+            case 17:
+                _a.sent();
+                return [2 /*return*/];
+            case 18: return [2 /*return*/];
+        }
+    });
+}); };
 // ran on app start
 var setup = function (debug) {
     if (debug === void 0) { debug = false; }
-    settings.configure(settingsConfig);
-    return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
+    return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, !settings.has('hotkeys')];
-                case 1:
-                    if (!_a.sent()) return [3 /*break*/, 3];
-                    if (debug)
-                        console.log('Using default hotkeys');
-                    return [4 /*yield*/, settings.set('hotkeys', defaults.hotkeys)];
-                case 2:
-                    _a.sent();
-                    _a.label = 3;
-                case 3: return [4 /*yield*/, !settings.has('channel')];
-                case 4:
-                    if (!_a.sent()) return [3 /*break*/, 6];
-                    if (debug)
-                        console.log('Using default channel');
-                    return [4 /*yield*/, settings.set('channel', defaults.channel)];
-                case 5:
-                    _a.sent();
-                    _a.label = 6;
-                case 6: return [4 /*yield*/, !settings.has('chat')];
-                case 7:
-                    if (!_a.sent()) return [3 /*break*/, 9];
-                    if (debug)
-                        console.log('Using default chat settings ');
-                    return [4 /*yield*/, settings.set('chat', defaults.chat)];
-                case 8:
-                    _a.sent();
-                    _a.label = 9;
-                case 9: return [4 /*yield*/, !settings.has('chat.muted')];
-                case 10:
-                    if (!_a.sent()) return [3 /*break*/, 12];
-                    if (debug)
-                        console.log('Using default chat settings ');
-                    return [4 /*yield*/, settings.set('chat.muted', defaults.chat.muted)];
-                case 11:
-                    _a.sent();
-                    _a.label = 12;
-                case 12:
-                    resolve(true);
-                    return [2 /*return*/];
-            }
+            settings.configure(settingsConfig);
+            return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, settings.has('hotkeys')];
+                            case 1:
+                                if (!!(_a.sent())) return [3 /*break*/, 3];
+                                if (debug)
+                                    console.log('Using default hotkeys');
+                                return [4 /*yield*/, settings.set('hotkeys', defaults.hotkeys)];
+                            case 2:
+                                _a.sent();
+                                _a.label = 3;
+                            case 3: return [4 /*yield*/, settings.has('channel')];
+                            case 4:
+                                if (!!(_a.sent())) return [3 /*break*/, 6];
+                                if (debug)
+                                    console.log('Using default channel');
+                                return [4 /*yield*/, settings.set('channel', defaults.channel)];
+                            case 5:
+                                _a.sent();
+                                _a.label = 6;
+                            case 6:
+                                validateChat();
+                                resolve(true);
+                                return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
-    }); });
+    });
 };
 exports.setup = setup;
+// API
+// maybe i move to api.ts?
 var api = require("./api");
 function refreshApiData(username) {
     var _this = this;

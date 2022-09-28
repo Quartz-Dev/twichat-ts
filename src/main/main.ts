@@ -8,9 +8,12 @@ import { channels } from '../shared/constants'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 import * as settings from 'electron-settings'
 
+// IF TRUE TURNS ON DEV TOOLS FOR BOTH WINDOWS
+var debug: boolean = false
+
 let mainWindow: BrowserWindow
 
-const createMainWindow = (channelname: string, pfp: string, fontSize: number, opacity: number, fadeDelay: number) => {
+const createMainWindow = (channelname: string, pfp: string, fontSize: number, opacity: number, fadeDelay: number, debug: boolean = false) => {
   // Create the browser window
   let mainWindowState = windowStateKeeper({
     file: 'desktop-window-state.json',
@@ -60,7 +63,7 @@ const createMainWindow = (channelname: string, pfp: string, fontSize: number, op
   })
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if(debug) mainWindow.webContents.openDevTools();
 };
 
 // app.disableHardwareAcceleration()
@@ -76,8 +79,8 @@ app.on("ready", async function () {
   let channelname = (await settings.get('channel.username')) as string
   let pfp = (await settings.get('channel.pfp')) as string
   
-  createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay)
-  chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay)
+  createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug)
+  chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug)
 
   let hotkeys = new Hotkeys()
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.S], chat.toggleLock)

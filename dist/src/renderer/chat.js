@@ -73,7 +73,7 @@ var channelTwitchBadges;
 var globalBTTVEmotes;
 var channelBTTVEmotes;
 var channelFFZEmotes;
-var mutedUsers;
+var mutedUsers = [];
 var updateBadgesEmotesMuted = function (event, _globalTwitchBadges, _channelTwitchBadges, _globalBTTVEmotes, _channelBTTVEmotes, _channelFFZEmotes, _mutedUsers) {
     globalTwitchBadges = _globalTwitchBadges;
     channelTwitchBadges = _channelTwitchBadges;

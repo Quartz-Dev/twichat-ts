@@ -9,7 +9,7 @@ import { WebContents } from 'electron'
 let chatWindow: BrowserWindow
 let mainWebContents: WebContents
 
-export const createWindow = async (fontSize: number, opacity: number, fadeDelay: number) => {
+export const createWindow = async (fontSize: number, opacity: number, fadeDelay: number, debug: boolean = false) => {
 
     let chatWindowState = windowStateKeeper({
         file: 'chat-window-state.json',
@@ -79,7 +79,7 @@ export const createWindow = async (fontSize: number, opacity: number, fadeDelay:
         twitch.connect(channelname, chatWindow.webContents, mainWebContents)
         
         //   Open the DevTools.
-        chatWindow.webContents.openDevTools();
+        if(debug) chatWindow.webContents.openDevTools();
       })
 
     // default opens as locked
@@ -132,10 +132,10 @@ export const scrollDown = () => {
     chatWindow.webContents.send('scrollDown')
 }
 
-export const launch = async (webContents: WebContents, fontSize: number, opacity: number, fadeDelay: number) => {
+export const launch = async (webContents: WebContents, fontSize: number, opacity: number, fadeDelay: number, debug: boolean = false) => {
     // creates and opens chat window
     mainWebContents = webContents
-    createWindow(fontSize, opacity, fadeDelay)
+    createWindow(fontSize, opacity, fadeDelay, debug)
 }
 
 const updateFontSize = (event: any, fontSize: number) => {

@@ -61,8 +61,10 @@
       <div class="selected-channel-container">
         <!-- ---- Profile Picture ----- -->
         <div class="pfp-container unselectable">
-          <img class="pfp unselectable" 
-            src="https://static-cdn.jtvnw.net/jtv_user_pictures/6883a9fc-5f73-41d9-a1f1-1547df43fd82-profile_image-300x300.png">
+          <img class="pfp unselectable"
+            onerror="this.src = '../img/default-pfp.png';"
+            src="../img/default-pfp.png"
+          >
           <div class="change-channel-text">change channel</div>
         </div>
         <!-- ------ Channel Name ------ -->

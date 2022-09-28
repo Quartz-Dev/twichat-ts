@@ -45,7 +45,7 @@ var channelTwitchBadges: api.twitchBadgeList
 var globalBTTVEmotes: api.bttvEmoteList
 var channelBTTVEmotes: api.bttvEmoteList
 var channelFFZEmotes: api.bttvEmoteList
-var mutedUsers: string[]
+var mutedUsers: string[] = []
 
 const updateBadgesEmotesMuted = (event: any, _globalTwitchBadges: api.twitchBadgeList, _channelTwitchBadges: api.twitchBadgeList, _globalBTTVEmotes: api.bttvEmoteList, _channelBTTVEmotes: api.bttvEmoteList, _channelFFZEmotes: api.bttvEmoteList, _mutedUsers: string[]) => {
     globalTwitchBadges = _globalTwitchBadges

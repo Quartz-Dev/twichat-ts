@@ -1,5 +1,4 @@
 import * as settings from 'electron-settings'
-// import { DEFAULT_KEYMAP } from './hotkeys'
 
 const settingsConfig: any = { 
     atomicSave: true,
@@ -14,10 +13,10 @@ const defaults: any = {
         // hide: DEFAULT_KEYMAP.HIDE
     },
     channel: {
-        username: 'roselol',
-        displayname: 'roselol',
-        id: '152928496',
-        pfp: 'https://static-cdn.jtvnw.net/jtv_user_pictures/6883a9fc-5f73-41d9-a1f1-1547df43fd82-profile_image-300x300.png',
+        username: '',
+        displayname: '',
+        id: '',
+        pfp: '',
         emotes: {
             bttv: {},
             ffz: {}
@@ -39,39 +38,86 @@ const defaults: any = {
         opacity: 1,
         fade: 0,
         locked: false,
-        muted: []
+        muted: [],
     }
 }
 
+export const validateHotkeys = async () => {
+
+    if(!(await settings.has('hotkeys'))){
+        await settings.set('hotkeys', defaults.hotkeys)
+    }
+
+}
+
+export const validateChannel = async () => {
+    
+    if(!(await settings.has('channel'))){
+        await settings.set('channel', defaults.channel)
+        return
+    }
+
+}
+
+const validateChat = async () => {
+    
+    if(!(await settings.has('chat'))){
+        await settings.set('chat', defaults.chat)
+        return
+    }
+
+    if(!(await settings.has('chat.size'))){
+        await settings.set('chat.size', defaults.chat.size)
+        return
+    }
+
+    if(!(await settings.has('chat.opacity'))){
+        await settings.set('chat.opacity', defaults.chat.opacity)
+        return
+    }
+
+    if(!(await settings.has('chat.fade'))){
+        await settings.set('chat.fade', defaults.chat.fade)
+        return
+    }
+
+    if(!(await settings.has('chat.locked'))){
+        await settings.set('chat.locked', defaults.chat.locked)
+        return
+    }
+    
+    if(!(await settings.has('chat.muted'))){
+        await settings.set('chat.muted', defaults.chat.muted)
+        return
+    }
+
+
+}
+
 // ran on app start
-export const setup = (debug=false) => {
+export const setup = async (debug=false) => {
 
     settings.configure(settingsConfig)
 
     return new Promise( async (resolve, reject) => {
-        if(await !settings.has('hotkeys')){
+        if(!(await settings.has('hotkeys'))){
             if(debug) console.log('Using default hotkeys')
             await settings.set('hotkeys', defaults.hotkeys)
         }
     
-        if(await !settings.has('channel')){
+        if(!(await settings.has('channel'))){
             if(debug) console.log('Using default channel')
             await settings.set('channel', defaults.channel)
         }
     
-        if(await !settings.has('chat')){
-            if(debug) console.log('Using default chat settings ')
-            await settings.set('chat', defaults.chat)
-        }
-
-        if(await !settings.has('chat.muted')){
-            if(debug) console.log('Using default chat settings ')
-            await settings.set('chat.muted', defaults.chat.muted)
-        }
+        validateChat()
 
         resolve(true)
     })
 }
+
+// API
+// maybe i move to api.ts?
 
 import * as api from './api'
 

@@ -45,8 +45,11 @@ var config = require("./config");
 var constants_1 = require("../shared/constants");
 var uiohook_napi_1 = require("uiohook-napi");
 var settings = require("electron-settings");
+// IF TRUE TURNS ON DEV TOOLS FOR BOTH WINDOWS
+var debug = false;
 var mainWindow;
-var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay) {
+var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay, debug) {
+    if (debug === void 0) { debug = false; }
     // Create the browser window
     var mainWindowState = windowStateKeeper({
         file: 'desktop-window-state.json',
@@ -93,7 +96,8 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay)
         });
     });
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (debug)
+        mainWindow.webContents.openDevTools();
 };
 // app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
@@ -119,8 +123,8 @@ electron_1.app.on("ready", function () {
                     return [4 /*yield*/, settings.get('channel.pfp')];
                 case 6:
                     pfp = (_a.sent());
-                    createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay);
-                    chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay);
+                    createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug);
+                    chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug);
                     hotkeys = new hotkeys_1["default"]();
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.S], chat.toggleLock);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.D], chat.toggleShow);
