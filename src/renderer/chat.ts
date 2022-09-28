@@ -17,17 +17,29 @@ const toggleLock = () => {
     ($('body').hasClass("body-locked")) ? lock() : unlock()
 }
 
-const scrollStep = 36
+const scrollStep: number = 36
+var scrollPaused: boolean = false
+var pauseTime: number = 5 // in seconds
+
+const tempPauseScroll = () => {
+    scrollPaused = true
+    setTimeout(()=> {
+        scrollPaused = false
+    }, pauseTime*1000)
+}
 
 const scrollUp = () => {
-    console.log('scrollUp')
     chatBox.scrollTop = (chatBox.scrollTop - scrollStep)
+    scrollPaused = true
+    tempPauseScroll()
 }
 
 const scrollDown = () => {
     console.log('scrollDown')
     chatBox.scrollTop = (chatBox.scrollTop + scrollStep)
+    tempPauseScroll()
 }
+
 
 var globalTwitchBadges: api.twitchBadgeList
 var channelTwitchBadges: api.twitchBadgeList
@@ -256,7 +268,8 @@ const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
         allLines[0].remove()
 
     // scrolls down
-    chatBox.scrollTop = chatBox.scrollHeight
+    if(!scrollPaused)
+        chatBox.scrollTop = chatBox.scrollHeight
 }
 
 const setFontSize = (event: any, fontSize: number) => {

@@ -69,12 +69,9 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
             case 1:
                 _a.sent();
                 _a.label = 2;
-            case 2:
-                console.log('disconencted?');
-                return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
+            case 2: return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
             case 3:
                 _a.sent();
-                console.log('got new data');
                 return [4 /*yield*/, settings.get('global.badges.twitch')];
             case 4:
                 globalTwitchBadges = _a.sent();
@@ -93,7 +90,6 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
                 return [4 /*yield*/, settings.get('channel.pfp')];
             case 9:
                 pfp = _a.sent();
-                console.log('pulled data from settings file');
                 _mainWebContetnts.send('updateChannelUI', channelname, pfp);
                 chatWebContents = _chatWebContents;
                 chatWebContents.send('updateBadgesEmotes', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes);

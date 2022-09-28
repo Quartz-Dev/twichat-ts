@@ -50,13 +50,23 @@ var toggleLock = function () {
     ($('body').hasClass("body-locked")) ? lock() : unlock();
 };
 var scrollStep = 36;
+var scrollPaused = false;
+var pauseTime = 5; // in seconds
+var tempPauseScroll = function () {
+    scrollPaused = true;
+    setTimeout(function () {
+        scrollPaused = false;
+    }, pauseTime * 1000);
+};
 var scrollUp = function () {
-    console.log('scrollUp');
     chatBox.scrollTop = (chatBox.scrollTop - scrollStep);
+    scrollPaused = true;
+    tempPauseScroll();
 };
 var scrollDown = function () {
     console.log('scrollDown');
     chatBox.scrollTop = (chatBox.scrollTop + scrollStep);
+    tempPauseScroll();
 };
 var globalTwitchBadges;
 var channelTwitchBadges;
@@ -239,7 +249,8 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
                 if (allLines.length > 120)
                     allLines[0].remove();
                 // scrolls down
-                chatBox.scrollTop = chatBox.scrollHeight;
+                if (!scrollPaused)
+                    chatBox.scrollTop = chatBox.scrollHeight;
                 return [2 /*return*/];
         }
     });
