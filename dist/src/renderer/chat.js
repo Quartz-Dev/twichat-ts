@@ -246,10 +246,28 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
         }
     });
 }); };
+var setFontSize = function (event, fontSize) {
+    $('.chat-text').css('font-size', fontSize + 'px');
+};
+var setOpacity = function (event, opacity) {
+    $('.chat-text').css('opacity', opacity);
+};
+var setFadeDelay = function (event, fadeDelay) {
+    // TODO
+};
+var loadSettings = function (event, fontSize, opacity, fadeDelay) {
+    setFontSize(null, fontSize);
+    setOpacity(null, opacity);
+    setFadeDelay(null, fadeDelay);
+};
 window.api.receive('toggleLock', toggleLock);
 window.api.receive('scrollUp', scrollUp);
 window.api.receive('scrollDown', scrollDown);
 window.api.receive('addLine', addLine);
 window.api.receive('clear', clear);
 window.api.receive('updateBadgesEmotes', updateBadgesEmotes);
+window.api.receive('loadSettings', loadSettings);
+window.api.receive('setFontSize', setFontSize);
+window.api.receive('setOpacity', setOpacity);
+window.api.receive('setFadeDelay', setFadeDelay);
 //# sourceMappingURL=chat.js.map

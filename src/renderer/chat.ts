@@ -32,7 +32,6 @@ const scrollDown = () => {
     chatBox.scrollTop = (chatBox.scrollTop + scrollStep)
 }
 
-
 var globalTwitchBadges: api.twitchBadgeList
 var channelTwitchBadges: api.twitchBadgeList
 var globalBTTVEmotes: api.bttvEmoteList
@@ -150,7 +149,6 @@ const buildBTTVHTML = (emoteId: string) => {
     return img
 }
 
-
 const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUserstate) => {
 
     var emotes = context['emotes']
@@ -263,9 +261,31 @@ const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
     chatBox.scrollTop = chatBox.scrollHeight
 }
 
+const setFontSize = (event: any, fontSize: number) => {
+    $('.chat-text').css('font-size', fontSize + 'px')
+}
+
+const setOpacity = (event: any, opacity: number) => {
+    $('.chat-text').css('opacity', opacity)
+}
+
+const setFadeDelay = (event: any, fadeDelay: number) => {
+    // TODO
+}
+const loadSettings = (event: any, fontSize: number, opacity: number, fadeDelay: number) => {
+
+    setFontSize(null, fontSize)
+    setOpacity(null, opacity)
+    setFadeDelay(null, fadeDelay)
+}
+
 window.api.receive('toggleLock', toggleLock)
 window.api.receive('scrollUp', scrollUp)
 window.api.receive('scrollDown', scrollDown)
 window.api.receive('addLine', addLine)
 window.api.receive('clear', clear)
 window.api.receive('updateBadgesEmotes', updateBadgesEmotes)
+window.api.receive('loadSettings', loadSettings)
+window.api.receive('setFontSize', setFontSize)
+window.api.receive('setOpacity', setOpacity)
+window.api.receive('setFadeDelay', setFadeDelay)

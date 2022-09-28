@@ -1,8 +1,3 @@
-"use strict";
-exports.__esModule = true;
-var electron_1 = require("electron");
-// import { channels } from '../shared/constants'
-var $ = require("jquery");
 var channels = {
     APP_NFO: 'app-info',
     UPDATE_CHAT: 'update-chat',
@@ -11,12 +6,12 @@ var channels = {
 };
 var sendClose = function () {
     console.log('sendingClose');
-    electron_1.ipcRenderer.invoke(channels.CLOSE_APP);
+    window.api.send(channels.CLOSE_APP);
 };
 $('#closeButton').on('click', sendClose);
 var sendMinimize = function () {
     console.log('sendingMinmize');
-    electron_1.ipcRenderer.invoke(channels.MINIMIZE_APP);
+    window.api.send(channels.MINIMIZE_APP);
 };
 var openSettings = function () {
     console.log('opening settings');
@@ -34,4 +29,54 @@ var toggleSettings = function () {
 $('#minimizeButton').on('click', sendMinimize);
 $('#settingsButton').on('click', toggleSettings);
 $('main').on('click', closeSettings);
+// font size
+$('#font-size-text').on('input', function () {
+    var fontSize = $(this).val();
+    $('#font-size-slider').val(fontSize);
+    window.api.send('updateFontSize', fontSize);
+});
+$('#font-size-slider').on('input', function () {
+    var fontSize = $(this).val();
+    $('#font-size-text').val($(this).val());
+    window.api.send('updateFontSize', fontSize);
+});
+// opacity
+$('#opacity-text').on('input', function () {
+    var opacity = $(this).val();
+    $('#opacity-slider').val(opacity);
+    window.api.send('updateOpacity', opacity);
+});
+$('#opacity-slider').on('input', function () {
+    var opacity = $(this).val();
+    $('#opacity-text').val(opacity);
+    window.api.send('updateOpacity', opacity);
+});
+// fadeout delay
+$('#fade-delay-text').on('input', function () {
+    var fadeDelay = $(this).val();
+    $('#fade-delay-slider').val(fadeDelay);
+    window.api.send('updateFadeDelay', fadeDelay);
+});
+$('#fade-delay-slider').on('input', function () {
+    var fadeDelay = $(this).val();
+    $('#fade-delay-text').val(fadeDelay);
+    window.api.send('updateFadeDelay', fadeDelay);
+});
+var updateSettingsInputs = function (event, fontSize, opacity, fadeDelay) {
+    console.log(">> Settings");
+    console.log(fontSize);
+    console.log(opacity);
+    console.log(fadeDelay);
+    console.log("<<");
+    // updates font size sliders
+    $('#font-size-text').val(fontSize);
+    $('#font-size-slider').val(fontSize);
+    // updates font opacity sliders
+    $('#opacity-text').val(opacity);
+    $('#opacity-slider').val(opacity);
+    // updates fade delay sliders
+    $('#fade-delay-text').val(fadeDelay);
+    $('#fade-delay-slider').val(fadeDelay);
+};
+window.api.receive('settings', updateSettingsInputs);
 //# sourceMappingURL=desktop.js.map

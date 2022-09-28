@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, webContents } from "electron";
+import { BrowserWindow, dialog, ipcMain, webContents } from "electron";
 import { configure } from "electron-settings";
 import * as windowStateKeeper from "electron-window-state"
 import * as settings from 'electron-settings'
@@ -28,7 +28,7 @@ export const createWindow = () => {
         show: false,
         icon: path.join(__dirname, '../img/icon.png'),
         webPreferences: {
-            nodeIntegration: true,
+            nodeIntegration: false,
             contextIsolation: true,
             preload: path.join(__dirname, '../shared/preload.js')
         }
@@ -72,15 +72,25 @@ export const close = () => {
     chatWindow.close()
 }
 
+
+var isLocked: boolean = true
+
 export const toggleLock = async () => {
     chatWindow.webContents.send('toggleLock')
-    let isLocked = await settings.get('chat.locked')
-    settings.set('chat.locked', !isLocked)
 }
 
 export const unlock = () => {
+    console.log('unlocking chat window')
+    isLocked = false
     chatWindow.setIgnoreMouseEvents(false)
     chatWindow.webContents.send('unlock')
+}
+
+export const lock = () => {
+    console.log('locking chat window')
+    isLocked = true
+    chatWindow.setIgnoreMouseEvents(true)
+    chatWindow.webContents.send('lock')
 }
 
 export const toggleShow = () => {
@@ -95,13 +105,41 @@ export const scrollDown = () => {
     chatWindow.webContents.send('scrollDown')
 }
 
-export const launch = async () => {
+export const launch = async (fontSize: number, opacity: number, fadeDelay: number) => {
+
+    // creates and opens chat window
     createWindow()
     // make sure window opens locked (no border)
 
+    // gets channel name from settings
     let channel = (await settings.get('channel.username')) as string
 
-    if(await settings.get('chat.locked') == true) 
+    // unlocks chat if needed
+    if(await settings.get('chat.locked') == false) unlock()
 
+    // gets chat saved settings and sends to client
+
+    chatWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
+
+    // connects to twitch
     twitch.connect(channel, chatWindow.webContents)
 }
+
+const updateFontSize = (event: any, fontSize: number) => {
+    chatWindow.webContents.send('setFontSize', fontSize)
+    settings.set('chat.size', fontSize)
+}
+
+const updateOpacity = (event: any, opacity: number) => {
+    chatWindow.webContents.send('setOpacity', opacity)
+    settings.set('chat.size', opacity)
+}
+
+const updateFadeDelay = (event: any, fadeDelay: number) => {
+    chatWindow.webContents.send('setFadeDelay', fadeDelay)
+    settings.set('chat.size', fadeDelay)
+}
+
+ipcMain.handle('updateFontSize', updateFontSize)
+ipcMain.handle('updateOpacity', updateOpacity)
+ipcMain.handle('updateFadeDelay', updateFadeDelay)

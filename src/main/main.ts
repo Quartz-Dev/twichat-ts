@@ -6,10 +6,11 @@ import * as chat from './chat_window';
 import * as config from './config'
 import { channels } from '../shared/constants'
 import { uIOhook, UiohookKey } from 'uiohook-napi'
+import * as settings from 'electron-settings'
 
 let mainWindow: BrowserWindow
 
-const createMainWindow = () => {
+const createMainWindow = (fontSize: number, opacity: number, fadeDelay: number) => {
   // Create the browser window
   let mainWindowState = windowStateKeeper({
     file: 'desktop-window-state.json',
@@ -27,9 +28,9 @@ const createMainWindow = () => {
     frame: false,
     icon: path.join(__dirname, '../../../public/icons/WindowIcon.png'),
     webPreferences: {
-      preload: path.join(app.getAppPath(), 'preload.js'),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: true,
+      preload: path.join(__dirname, '../shared/preload.js')
     }
   });
 
@@ -44,6 +45,7 @@ const createMainWindow = () => {
   // shows the page after electron finishes setup
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
+    mainWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
   }) 
 
   // disables resizing of window
@@ -65,18 +67,24 @@ const createMainWindow = () => {
 
 app.on("ready", async function () {
   
-  createMainWindow()
-  chat.launch()
+  await config.setup(true)
+  
+
+  let fontSize = (await settings.get('chat.size')) as number
+  let opacity = (await settings.get('chat.opacity')) as number
+  let fadeDelay = (await settings.get('chat.fade')) as number
+  
+  createMainWindow(fontSize, opacity, fadeDelay)
+  chat.launch(fontSize, opacity, fadeDelay)
 
   let hotkeys = new Hotkeys()
-  hotkeys.register([UiohookKey.Ctrl, UiohookKey.Z], chat.toggleLock)
-  hotkeys.register([UiohookKey.Ctrl, UiohookKey.X], chat.toggleShow)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.S], chat.toggleLock)
+  hotkeys.register([UiohookKey.Ctrl, UiohookKey.D], chat.toggleShow)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowUp], chat.scrollUp)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowDown], chat.scrollDown)
 
   hotkeys.run()
 
-  await config.setup(true)
 
 });
 
@@ -94,4 +102,3 @@ ipcMain.handle(channels.CLOSE_APP, () => {
 ipcMain.handle(channels.MINIMIZE_APP, () => {
   mainWindow.minimize()
 })
-

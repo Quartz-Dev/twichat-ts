@@ -40,12 +40,13 @@ var electron_1 = require("electron");
 var path = require("path");
 var windowStateKeeper = require("electron-window-state");
 var hotkeys_1 = require("./hotkeys");
-var chat = require("./chat/chat_window");
+var chat = require("./chat_window");
 var config = require("./config");
 var constants_1 = require("../shared/constants");
 var uiohook_napi_1 = require("uiohook-napi");
+var settings = require("electron-settings");
 var mainWindow;
-var createMainWindow = function () {
+var createMainWindow = function (fontSize, opacity, fadeDelay) {
     // Create the browser window
     var mainWindowState = windowStateKeeper({
         file: 'desktop-window-state.json',
@@ -62,9 +63,9 @@ var createMainWindow = function () {
         frame: false,
         icon: path.join(__dirname, '../../../public/icons/WindowIcon.png'),
         webPreferences: {
-            preload: path.join(electron_1.app.getAppPath(), 'preload.js'),
             nodeIntegration: true,
-            contextIsolation: false
+            contextIsolation: true,
+            preload: path.join(__dirname, '../shared/preload.js')
         }
     });
     // remembers window state when closing/reopening apps
@@ -76,6 +77,7 @@ var createMainWindow = function () {
     // shows the page after electron finishes setup
     mainWindow.once('ready-to-show', function () {
         mainWindow.show();
+        mainWindow.webContents.send('settings', fontSize, opacity, fadeDelay);
     });
     // disables resizing of window
     mainWindow.setResizable(false);
@@ -96,21 +98,29 @@ var createMainWindow = function () {
 // app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
     return __awaiter(this, void 0, void 0, function () {
-        var hotkeys;
+        var fontSize, opacity, fadeDelay, hotkeys;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    createMainWindow();
-                    chat.launch();
+                case 0: return [4 /*yield*/, config.setup(true)];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, settings.get('chat.size')];
+                case 2:
+                    fontSize = (_a.sent());
+                    return [4 /*yield*/, settings.get('chat.opacity')];
+                case 3:
+                    opacity = (_a.sent());
+                    return [4 /*yield*/, settings.get('chat.fade')];
+                case 4:
+                    fadeDelay = (_a.sent());
+                    createMainWindow(fontSize, opacity, fadeDelay);
+                    chat.launch(fontSize, opacity, fadeDelay);
                     hotkeys = new hotkeys_1["default"]();
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Z], chat.toggleLock);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.X], chat.toggleShow);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.S], chat.toggleLock);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.D], chat.toggleShow);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
                     hotkeys.run();
-                    return [4 /*yield*/, config.setup(true)];
-                case 1:
-                    _a.sent();
                     return [2 /*return*/];
             }
         });
