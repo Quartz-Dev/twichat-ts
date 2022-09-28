@@ -64,6 +64,11 @@ export const setup = (debug=false) => {
             await settings.set('chat', defaults.chat)
         }
 
+        if(await !settings.has('chat.muted')){
+            if(debug) console.log('Using default chat settings ')
+            await settings.set('chat.muted', defaults.chat.muted)
+        }
+
         resolve(true)
     })
 }

@@ -113,7 +113,16 @@ var setup = function (debug) {
                 case 8:
                     _a.sent();
                     _a.label = 9;
-                case 9:
+                case 9: return [4 /*yield*/, !settings.has('chat.muted')];
+                case 10:
+                    if (!_a.sent()) return [3 /*break*/, 12];
+                    if (debug)
+                        console.log('Using default chat settings ');
+                    return [4 /*yield*/, settings.set('chat.muted', defaults.chat.muted)];
+                case 11:
+                    _a.sent();
+                    _a.label = 12;
+                case 12:
                     resolve(true);
                     return [2 /*return*/];
             }

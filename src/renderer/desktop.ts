@@ -5,6 +5,8 @@ const channels = {
     MINIMIZE_APP: 'minimize'
 };
 
+var currChannel: string
+
 const sendClose = () => {
     window.api.send(channels.CLOSE_APP)
 }
@@ -90,6 +92,7 @@ const updateSettingsInputs = (event: any, channelname: string, pfp: string, font
 }
 
 const updateChannelUI = (event: any, channelname: string, pfp: string) => {
+    currChannel = channelname
     $('#channel-name-text').val(channelname)
     $('.pfp').attr('src', pfp)
 }
@@ -125,7 +128,7 @@ $(".selected-channel-container").on('keyup', function (event) {
 // this is also called on keyup
 $(".selected-channel-container").on('focusout', function (event) {
     let username =  $('#channel-name-text').val() as string
-    setChannel(username)
+    if(currChannel != username) setChannel(username)
 })
 
 function setChannel(username: string) {

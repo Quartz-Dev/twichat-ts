@@ -4,6 +4,7 @@ var channels = {
     CLOSE_APP: 'close',
     MINIMIZE_APP: 'minimize'
 };
+var currChannel;
 var sendClose = function () {
     window.api.send(channels.CLOSE_APP);
 };
@@ -70,6 +71,7 @@ var updateSettingsInputs = function (event, channelname, pfp, fontSize, opacity,
     $('#fade-delay-slider').val(fadeDelay);
 };
 var updateChannelUI = function (event, channelname, pfp) {
+    currChannel = channelname;
     $('#channel-name-text').val(channelname);
     $('.pfp').attr('src', pfp);
 };
@@ -99,7 +101,8 @@ $(".selected-channel-container").on('keyup', function (event) {
 // this is also called on keyup
 $(".selected-channel-container").on('focusout', function (event) {
     var username = $('#channel-name-text').val();
-    setChannel(username);
+    if (currChannel != username)
+        setChannel(username);
 });
 function setChannel(username) {
     window.api.send('setChannel', username);
