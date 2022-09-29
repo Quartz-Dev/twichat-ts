@@ -8,8 +8,12 @@ var Hotkeys = /** @class */ (function () {
         var _this = this;
         this.keys_pressed = [];
         this.hotkey_map = new Map();
+        this.scroll_hotkey_map = new Map();
         this.register = function (keys, action) {
             _this.hotkey_map.set(keys, action);
+        };
+        this.registerScroll = function (keys, upAction, downAction) {
+            _this.scroll_hotkey_map.set(keys, [upAction, downAction]);
         };
         this.run = function (debug) {
             if (debug === void 0) { debug = false; }
@@ -38,10 +42,16 @@ var Hotkeys = /** @class */ (function () {
             });
             uiohook_napi_1.uIOhook.on('wheel', function (event) {
                 var direction = event.rotation === 1 ? 'DOWN' : 'UP';
-                if (_this.keys_pressed.includes(uiohook_napi_1.UiohookKey.Ctrl)) {
-                    if (debug)
-                        console.log("Scroll Direction: ".concat(direction));
-                }
+                _this.scroll_hotkey_map.forEach(function (actions, hotkeys) {
+                    if (hotkeys.every(function (key) { return _this.keys_pressed.includes(key); })) {
+                        var action = void 0;
+                        if (direction === 'UP')
+                            action = actions[0];
+                        if (direction === 'DOWN')
+                            action = actions[1];
+                        action();
+                    }
+                });
             });
             uiohook_napi_1.uIOhook.start();
         };

@@ -64,7 +64,6 @@ const createMainWindow = (channelname: string, pfp: string, fontSize: number, op
   
   // closes app
   mainWindow.on('close', async function(event){
-    console.log('close')
     chat.close()
     app.quit()
   })
@@ -95,6 +94,8 @@ app.on("ready", async function () {
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.Slash], toggleDevTools)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowUp], chat.scrollUp)
   hotkeys.register([UiohookKey.Ctrl, UiohookKey.ArrowDown], chat.scrollDown)
+  
+  hotkeys.registerScroll([UiohookKey.Ctrl], chat.scrollUp, chat.scrollDown)
 
   hotkeys.run()
 

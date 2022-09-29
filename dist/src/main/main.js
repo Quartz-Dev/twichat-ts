@@ -94,7 +94,6 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay,
     mainWindow.on('close', function (event) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                console.log('close');
                 chat.close();
                 electron_1.app.quit();
                 return [2 /*return*/];
@@ -137,6 +136,7 @@ electron_1.app.on("ready", function () {
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Slash], toggleDevTools);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
                     hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
+                    hotkeys.registerScroll([uiohook_napi_1.UiohookKey.Ctrl], chat.scrollUp, chat.scrollDown);
                     hotkeys.run();
                     return [2 /*return*/];
             }
