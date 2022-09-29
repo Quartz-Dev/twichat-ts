@@ -249,7 +249,7 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
             case 0:
                 mutedUsers.push('StreamElements');
                 mutedUsers.push('roseiol');
-                mutedUsers.push('nightbot');
+                mutedUsers.push('Nightbot');
                 if (msg.startsWith('!'))
                     return [2 /*return*/];
                 if (mutedUsers.includes(context['display-name']))
