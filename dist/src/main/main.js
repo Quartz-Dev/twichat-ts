@@ -68,7 +68,7 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay,
         show: false,
         // backgroundColor: global.colors.BACKGROUND,
         frame: false,
-        icon: path.join(__dirname, '../../../public/icons/WindowIcon.png'),
+        icon: path.join(__dirname, '../../../public/icons/twichat-icon.ico'),
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,

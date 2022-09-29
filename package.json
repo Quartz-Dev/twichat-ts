@@ -43,6 +43,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
+        "icon": "public/icons/twichat-icon"
       },
       "makers": [
         {
