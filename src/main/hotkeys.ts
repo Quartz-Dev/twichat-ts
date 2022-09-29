@@ -6,11 +6,15 @@ export default class Hotkeys {
 
     private keys_pressed: number[] = []
     private hotkey_map: Map<number[], Function> = new Map()
+    private scroll_hotkey_map: Map<number[], Function[]> = new Map()
 
     public register = (keys:number[], action: () => void) => {
         this.hotkey_map.set(keys, action)
     }
 
+    public registerScroll = (keys:number[], upAction: () => void, downAction: () => void) => {
+        this.scroll_hotkey_map.set(keys, [upAction, downAction])
+    }
     public run = (debug: boolean = false) => {
         uIOhook.on('keydown', event => {
             let key: number = event.keycode
@@ -37,9 +41,14 @@ export default class Hotkeys {
 
         uIOhook.on('wheel', event => {
             let direction = event.rotation === 1 ? 'DOWN' : 'UP'
-            if(this.keys_pressed.includes(UiohookKey.Ctrl)) {
-                if(debug) console.log(`Scroll Direction: ${direction}`)
-            }
+            this.scroll_hotkey_map.forEach((actions, hotkeys: number[]) => {
+                if(hotkeys.every(key => this.keys_pressed.includes(key))) {
+                    let action: Function
+                    if(direction === 'UP') action = actions[0]
+                    if(direction === 'DOWN') action = actions[1]
+                    action()
+                }
+            })
         })
 
         uIOhook.start()
