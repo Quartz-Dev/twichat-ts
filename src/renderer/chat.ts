@@ -258,6 +258,12 @@ const buildMessage = (msg: string, context: any) => {
 
 const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
 
+    mutedUsers.push('StreamElements')
+    mutedUsers.push('roseiol')
+    mutedUsers.push('Nightbot')
+
+    if(msg.startsWith('!')) return
+
     if(mutedUsers.includes(context['display-name'])) return
     if(mutedUsers.includes(context['username'])) return
 

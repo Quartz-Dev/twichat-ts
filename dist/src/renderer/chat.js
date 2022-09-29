@@ -247,6 +247,11 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                mutedUsers.push('StreamElements');
+                mutedUsers.push('roseiol');
+                mutedUsers.push('nightbot');
+                if (msg.startsWith('!'))
+                    return [2 /*return*/];
                 if (mutedUsers.includes(context['display-name']))
                     return [2 /*return*/];
                 if (mutedUsers.includes(context['username']))
