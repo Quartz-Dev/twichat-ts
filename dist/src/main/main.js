@@ -94,6 +94,8 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay,
     mainWindow.on('close', function (event) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
+                console.log('close');
+                chat.close();
                 electron_1.app.quit();
                 return [2 /*return*/];
             });

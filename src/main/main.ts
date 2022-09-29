@@ -64,6 +64,8 @@ const createMainWindow = (channelname: string, pfp: string, fontSize: number, op
   
   // closes app
   mainWindow.on('close', async function(event){
+    console.log('close')
+    chat.close()
     app.quit()
   })
 
