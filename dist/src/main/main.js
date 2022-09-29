@@ -131,12 +131,12 @@ electron_1.app.on("ready", function () {
                     createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug);
                     chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug);
                     hotkeys = new hotkeys_1["default"]();
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Period], chat.toggleLock);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Comma], chat.toggleShow);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.Slash], toggleDevTools);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Ctrl, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
-                    hotkeys.registerScroll([uiohook_napi_1.UiohookKey.Ctrl], chat.scrollUp, chat.scrollDown);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Period], chat.toggleLock);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Comma], chat.toggleShow);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Slash], toggleDevTools);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
+                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
+                    hotkeys.registerScroll([uiohook_napi_1.UiohookKey.Alt], chat.scrollUp, chat.scrollDown);
                     hotkeys.run();
                     return [2 /*return*/];
             }
