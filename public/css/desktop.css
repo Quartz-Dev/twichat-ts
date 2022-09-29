@@ -229,6 +229,10 @@
     transform: translate(-50%, -50%);
   }
   
+  ::selection {
+    background: #9137bf;
+  }
+
   /* channel name */
   
   .channel-name-container {
