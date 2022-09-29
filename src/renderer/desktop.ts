@@ -19,10 +19,14 @@ $('#minimizeButton').on('click', sendMinimize)
 
 const openSettings = () => {
     $('.settings-container').css('display', 'flex')
+    // $('.settings-container').removeClass('settings-closed')
+    // $('.settings-container').addClass('settings-opened')
 }
 
 const closeSettings = () => {
     $('.settings-container').css('display', 'none')
+    // $('.settings-container').removeClass('settings-opened')
+    // $('.settings-container').addClass('settings-closed')
 }
 
 const toggleSettings = () => {
@@ -30,8 +34,6 @@ const toggleSettings = () => {
     state == 'flex' ? closeSettings() : openSettings()
 }
 $('#settingsButton').on('click', toggleSettings)
-
-
 
 $('main').on('click', closeSettings)
 

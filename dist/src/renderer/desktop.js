@@ -15,9 +15,13 @@ var sendMinimize = function () {
 $('#minimizeButton').on('click', sendMinimize);
 var openSettings = function () {
     $('.settings-container').css('display', 'flex');
+    // $('.settings-container').removeClass('settings-closed')
+    // $('.settings-container').addClass('settings-opened')
 };
 var closeSettings = function () {
     $('.settings-container').css('display', 'none');
+    // $('.settings-container').removeClass('settings-opened')
+    // $('.settings-container').addClass('settings-closed')
 };
 var toggleSettings = function () {
     var state = $('.settings-container').css('display');
