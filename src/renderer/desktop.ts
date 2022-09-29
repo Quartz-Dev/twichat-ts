@@ -97,6 +97,10 @@ const updateChannelUI = (event: any, channelname: string, pfp: string) => {
     $('.pfp').attr('src', pfp)
 }
 
+$('.selected-channel-container').on('click', function(){
+    $('#channel-name-text').trigger('focus')
+})
+
 $('#toggle-show').on('click', function() {
     window.api.send('toggleShow')
 })
