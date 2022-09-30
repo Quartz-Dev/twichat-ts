@@ -38,7 +38,6 @@ const scrollUp = () => {
 }
 
 const scrollDown = () => {
-    console.log('scrollDown')
     chatBox.scrollTop = (chatBox.scrollTop + scrollStep)
     tempPauseScroll()
 }
@@ -321,7 +320,6 @@ const setOpacity = (event: any, opacity: number) => {
 }
 
 const fadeChat = () => {
-    console.log('fading out chat')
     $('.chat-text').fadeOut()
 }
 

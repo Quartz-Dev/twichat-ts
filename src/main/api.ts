@@ -4,11 +4,10 @@ function fetch(url: string) {
     return new Promise((resolve, reject) => {
         axios.get(url)
             .then(res => {
-                res.status == 200 ? resolve(res.data) : resolve(null)
+                res.status == 200 ? resolve(res.data) : resolve(false)
             })
             .catch(err => {
-                console.log(err)
-                resolve(null)
+                resolve(false)
             })
     })
 }

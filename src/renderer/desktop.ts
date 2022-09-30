@@ -146,7 +146,15 @@ function setChannel(username: string) {
     window.api.send('setChannel', username)
 }
 
+const userNotFound = () => {
+    console.log('USER NOT FOUND')
+    $('.pfp').attr('src', '')
+    $('#channel-name-text').trigger('focus')
+    $('#channel-name-text').trigger('select')
+}
+
 window.api.receive('settings', updateSettingsInputs)
 window.api.receive('updateShowSwitch', updateShowSwitch)
 window.api.receive('updateLockSwitch', updateLockSwitch)
 window.api.receive('updateChannelUI', updateChannelUI)
+window.api.receive('userNotFound', userNotFound)
