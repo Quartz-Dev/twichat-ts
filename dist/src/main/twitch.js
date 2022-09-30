@@ -73,7 +73,7 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
             case 3:
                 userExists = _a.sent();
                 if (!userExists)
-                    return [2 /*return*/, _mainWebContetnts.send('userDoesNotExist')];
+                    return [2 /*return*/, _mainWebContetnts.send('userNotFound')];
                 return [4 /*yield*/, settings.get('global.badges.twitch')];
             case 4:
                 globalTwitchBadges = _a.sent();

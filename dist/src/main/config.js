@@ -207,8 +207,10 @@ function refreshApiData(username) {
                 case 0: return [4 /*yield*/, api.fetchData(username)];
                 case 1:
                     userData = (_a.sent());
-                    if (!userData)
-                        return [2 /*return*/, resolve(false)];
+                    if (!userData) {
+                        resolve(false);
+                        return [2 /*return*/];
+                    }
                     return [4 /*yield*/, saveChatSettings(userData)];
                 case 2:
                     _a.sent();
@@ -221,40 +223,43 @@ function refreshApiData(username) {
 exports.refreshApiData = refreshApiData;
 function saveChatSettings(data) {
     return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!data)
-                        return [2 /*return*/];
-                    return [4 /*yield*/, settings.set('channel.username', data.username)];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.displayname', data.displayname)];
-                case 2:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.id', data.id)];
-                case 3:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.pfp', (data.pfp).toString())];
-                case 4:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.emotes.bttv', data.emotes.bttv.channel)];
-                case 5:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.emotes.ffz', data.emotes.ffz.channel)];
-                case 6:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('channel.badges.twitch', data.badges.channel)];
-                case 7:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('global.badges.twitch', (data.badges.global))];
-                case 8:
-                    _a.sent();
-                    return [4 /*yield*/, settings.set('global.emotes.bttv', data.emotes.bttv.global)];
-                case 9:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, settings.set('channel.username', data.username)];
+                            case 1:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.displayname', data.displayname)];
+                            case 2:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.id', data.id)];
+                            case 3:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.pfp', (data.pfp).toString())];
+                            case 4:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.emotes.bttv', data.emotes.bttv.channel)];
+                            case 5:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.emotes.ffz', data.emotes.ffz.channel)];
+                            case 6:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('channel.badges.twitch', data.badges.channel)];
+                            case 7:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('global.badges.twitch', (data.badges.global))];
+                            case 8:
+                                _a.sent();
+                                return [4 /*yield*/, settings.set('global.emotes.bttv', data.emotes.bttv.global)];
+                            case 9:
+                                _a.sent();
+                                resolve(true);
+                                return [2 /*return*/];
+                        }
+                    });
+                }); })];
         });
     });
 }

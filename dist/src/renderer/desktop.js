@@ -122,6 +122,7 @@ function setChannel(username) {
     window.api.send('setChannel', username);
 }
 var userNotFound = function () {
+    console.log('USER NOT FOUND');
     $('.pfp').attr('src', '');
     $('#channel-name-text').trigger('focus');
     $('#channel-name-text').trigger('select');

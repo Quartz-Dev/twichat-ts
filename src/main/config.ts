@@ -122,26 +122,28 @@ export const setup = async (debug=false) => {
 import * as api from './api'
 
 export function refreshApiData(username: string) {
-
     return new Promise( async (resolve, reject) => {
         let userData = (await api.fetchData(username)) as any
-        if(!userData)
-            return resolve(false)
-        await saveChatSettings(userData as api.Data)        
+        if(!userData){
+            resolve(false)
+            return
+        }
+        await saveChatSettings(userData as api.Data)
         resolve(true)
     })
-
 }
 
 async function saveChatSettings(data: api.Data) {
-
-    await settings.set('channel.username', data.username)
-    await settings.set('channel.displayname', data.displayname)
-    await settings.set('channel.id', data.id)
-    await settings.set('channel.pfp', (data.pfp).toString())
-    await settings.set('channel.emotes.bttv', data.emotes.bttv.channel)
-    await settings.set('channel.emotes.ffz', data.emotes.ffz.channel)
-    await settings.set('channel.badges.twitch', data.badges.channel)
-    await settings.set('global.badges.twitch', (data.badges.global))
-    await settings.set('global.emotes.bttv', data.emotes.bttv.global)
+    return new Promise( async (resolve, reject) => {
+        await settings.set('channel.username', data.username)
+        await settings.set('channel.displayname', data.displayname)
+        await settings.set('channel.id', data.id)
+        await settings.set('channel.pfp', (data.pfp).toString())
+        await settings.set('channel.emotes.bttv', data.emotes.bttv.channel)
+        await settings.set('channel.emotes.ffz', data.emotes.ffz.channel)
+        await settings.set('channel.badges.twitch', data.badges.channel)
+        await settings.set('global.badges.twitch', (data.badges.global))
+        await settings.set('global.emotes.bttv', data.emotes.bttv.global)
+        resolve(true)
+    })
 }
