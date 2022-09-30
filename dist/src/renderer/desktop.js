@@ -55,11 +55,17 @@ $('#opacity-slider').on('input', function () {
 $('#fade-delay-text').on('input', function () {
     var fadeDelay = $(this).val();
     $('#fade-delay-slider').val(fadeDelay);
+    if (fadeDelay == 0)
+        $('#fade-delay-text').val('');
+    if (fadeDelay == '')
+        $('#fade-delay-slider').val(0);
     window.api.send('updateFadeDelay', fadeDelay);
 });
 $('#fade-delay-slider').on('input', function () {
     var fadeDelay = $(this).val();
     $('#fade-delay-text').val(fadeDelay);
+    if (fadeDelay == 0)
+        $('#fade-delay-text').val('');
     window.api.send('updateFadeDelay', fadeDelay);
 });
 var updateSettingsInputs = function (event, channelname, pfp, fontSize, opacity, fadeDelay) {
@@ -71,7 +77,7 @@ var updateSettingsInputs = function (event, channelname, pfp, fontSize, opacity,
     $('#opacity-text').val(opacity);
     $('#opacity-slider').val(opacity);
     // updates fade delay sliders
-    $('#fade-delay-text').val(fadeDelay);
+    $('#fade-delay-text').val(fadeDelay == 0 ? '' : fadeDelay);
     $('#fade-delay-slider').val(fadeDelay);
 };
 var updateChannelUI = function (event, channelname, pfp) {
