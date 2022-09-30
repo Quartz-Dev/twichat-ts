@@ -73,7 +73,7 @@ export const createWindow = async (fontSize: number, opacity: number, fadeDelay:
         isLocked ? lock() : unlock()
         // gets chat saved settings and sends to client
 
-        chatWindow.webContents.send('settings', fontSize, opacity, fadeDelay)
+        chatWindow.webContents.send('loadSettings', fontSize, opacity, fadeDelay)
 
         // connects to twitch
         twitch.connect(channelname, chatWindow.webContents, mainWebContents)
