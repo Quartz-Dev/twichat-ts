@@ -135,8 +135,6 @@ export function refreshApiData(username: string) {
 
 async function saveChatSettings(data: api.Data) {
 
-    if(!data) return
-
     await settings.set('channel.username', data.username)
     await settings.set('channel.displayname', data.displayname)
     await settings.set('channel.id', data.id)
