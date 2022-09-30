@@ -119,6 +119,7 @@ $(".selected-channel-container").on('focusout', function (event) {
         setChannel(username);
 });
 function setChannel(username) {
+    username = username.replace(/\s+/g, '');
     window.api.send('setChannel', username);
 }
 var userNotFound = function () {

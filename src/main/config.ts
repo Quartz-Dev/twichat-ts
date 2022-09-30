@@ -9,8 +9,12 @@ const settingsConfig: any = {
 
 const defaults: any = {
     hotkeys: {
-        // lock: DEFAULT_KEYMAP.LOCK,
-        // hide: DEFAULT_KEYMAP.HIDE
+        show: [56, 51],
+        lock: [56, 52],
+        scrollUp: [56, 57416],
+        scrollDown: [56, 57424],
+        scrollWheel: [56],
+        devTools: [56, 53]
     },
     channel: {
         username: '',
@@ -100,15 +104,10 @@ export const setup = async (debug=false) => {
     settings.configure(settingsConfig)
 
     return new Promise( async (resolve, reject) => {
-        if(!(await settings.has('hotkeys'))){
-            if(debug) console.log('Using default hotkeys')
-            await settings.set('hotkeys', defaults.hotkeys)
-        }
+
+        validateHotkeys()
     
-        if(!(await settings.has('channel'))){
-            if(debug) console.log('Using default channel')
-            await settings.set('channel', defaults.channel)
-        }
+        validateChannel()
     
         validateChat()
 

@@ -2,6 +2,11 @@
 // - ie: CTRL+Z would remove undo 
 import { uIOhook, UiohookKey } from 'uiohook-napi'
 
+const getKeyFromCode= (code: number) => {
+    let keys = UiohookKey as any
+    return Object.keys(UiohookKey).find(key => keys[key] === code)
+}
+
 export default class Hotkeys {
 
     private keys_pressed: number[] = []
@@ -9,7 +14,8 @@ export default class Hotkeys {
     private scroll_hotkey_map: Map<number[], Function[]> = new Map()
 
     public register = (keys:number[], action: () => void) => {
-        this.hotkey_map.set(keys, action)
+        if(!keys) return console.log(`Error reading hotkeys: ${action}`)
+            this.hotkey_map.set(keys, action)
     }
 
     public registerScroll = (keys:number[], upAction: () => void, downAction: () => void) => {
@@ -20,11 +26,10 @@ export default class Hotkeys {
             let key: number = event.keycode
             if(!this.keys_pressed.includes(key)) {
                 this.keys_pressed.push(key)
-                if(debug) console.log(`Pressed: ${key}`)
+                if(debug) console.log(`Pressed: ${getKeyFromCode(key)}`)
 
                 this.hotkey_map.forEach((action, hotkeys: number[]) => {
                     if(hotkeys.every(key => this.keys_pressed.includes(key))) {
-    
                         if(debug) console.log(`Hotkey Pressed: ${hotkeys}`)
                         action()
                     }
@@ -36,7 +41,7 @@ export default class Hotkeys {
             let key: number = event.keycode
             let i: number = this.keys_pressed.indexOf(key)
             if(i!= -1) this.keys_pressed.splice(i, 1)
-            if(debug) console.log(`Let Go: ${key}`)
+            if(debug) console.log(`Let Go: ${getKeyFromCode(key)}`)
         })
 
         uIOhook.on('wheel', event => {
@@ -52,5 +57,9 @@ export default class Hotkeys {
         })
 
         uIOhook.start()
+    }
+
+    public stop = () => {
+        uIOhook.stop()
     }
 }

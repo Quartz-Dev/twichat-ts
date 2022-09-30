@@ -43,7 +43,6 @@ var hotkeys_1 = require("./hotkeys");
 var chat = require("./chat_window");
 var config = require("./config");
 var constants_1 = require("../shared/constants");
-var uiohook_napi_1 = require("uiohook-napi");
 var settings = require("electron-settings");
 // IF TRUE TURNS ON DEV TOOLS FOR BOTH WINDOWS
 var debug = false;
@@ -107,7 +106,7 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay,
 // app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
     return __awaiter(this, void 0, void 0, function () {
-        var fontSize, opacity, fadeDelay, channelname, pfp, hotkeys;
+        var fontSize, opacity, fadeDelay, channelname, pfp;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, config.setup(true)];
@@ -130,14 +129,7 @@ electron_1.app.on("ready", function () {
                     pfp = (_a.sent());
                     createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug);
                     chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug);
-                    hotkeys = new hotkeys_1["default"]();
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Period], chat.toggleLock);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Comma], chat.toggleShow);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.Slash], toggleDevTools);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.ArrowUp], chat.scrollUp);
-                    hotkeys.register([uiohook_napi_1.UiohookKey.Alt, uiohook_napi_1.UiohookKey.ArrowDown], chat.scrollDown);
-                    hotkeys.registerScroll([uiohook_napi_1.UiohookKey.Alt], chat.scrollUp, chat.scrollDown);
-                    hotkeys.run();
+                    setupHotkeys();
                     return [2 /*return*/];
             }
         });
@@ -155,4 +147,77 @@ electron_1.ipcMain.handle(constants_1.channels.CLOSE_APP, function () {
 electron_1.ipcMain.handle(constants_1.channels.MINIMIZE_APP, function () {
     mainWindow.minimize();
 });
+// HOTKEYS
+var hotkeys;
+var setupShowHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.register(key_map, chat.toggleShow);
+        return [2 /*return*/];
+    });
+}); };
+var setupLockHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.register(key_map, chat.toggleLock);
+        return [2 /*return*/];
+    });
+}); };
+var setupScrollUpHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.register(key_map, chat.scrollUp);
+        return [2 /*return*/];
+    });
+}); };
+var setupScrollDownHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.register(key_map, chat.scrollDown);
+        return [2 /*return*/];
+    });
+}); };
+var setupScrollWheelHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.registerScroll(key_map, chat.scrollUp, chat.scrollDown);
+        return [2 /*return*/];
+    });
+}); };
+var setupDevToolsHotkey = function (key_map) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        hotkeys.register(key_map, toggleDevTools);
+        return [2 /*return*/];
+    });
+}); };
+var setupHotkeys = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var hotkeyShow, hotkeyLock, hotkeyScrollUp, hotkeyScrollDown, hotKeyScrollWheel, hotKeyDevTools;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                hotkeys = new hotkeys_1["default"]();
+                return [4 /*yield*/, settings.get('hotkeys.show')];
+            case 1:
+                hotkeyShow = _a.sent();
+                return [4 /*yield*/, settings.get('hotkeys.lock')];
+            case 2:
+                hotkeyLock = _a.sent();
+                setupShowHotkey(hotkeyShow);
+                setupLockHotkey(hotkeyLock);
+                return [4 /*yield*/, settings.get('hotkeys.scrollUp')];
+            case 3:
+                hotkeyScrollUp = _a.sent();
+                return [4 /*yield*/, settings.get('hotkeys.scrollDown')];
+            case 4:
+                hotkeyScrollDown = _a.sent();
+                return [4 /*yield*/, settings.get('hotkeys.scrollWheel')];
+            case 5:
+                hotKeyScrollWheel = _a.sent();
+                setupScrollUpHotkey(hotkeyScrollUp);
+                setupScrollDownHotkey(hotkeyScrollDown);
+                setupScrollWheelHotkey(hotKeyScrollWheel);
+                return [4 /*yield*/, settings.get('hotkeys.devTools')];
+            case 6:
+                hotKeyDevTools = _a.sent();
+                setupDevToolsHotkey(hotKeyDevTools);
+                hotkeys.run();
+                return [2 /*return*/];
+        }
+    });
+}); };
 //# sourceMappingURL=main.js.map

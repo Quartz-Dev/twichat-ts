@@ -143,6 +143,8 @@ $(".selected-channel-container").on('focusout', function (event) {
 })
 
 function setChannel(username: string) {
+    username = username.replace(/\s+/g, '')
+    
     window.api.send('setChannel', username)
 }
 

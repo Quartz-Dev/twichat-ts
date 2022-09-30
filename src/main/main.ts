@@ -88,16 +88,7 @@ app.on("ready", async function () {
   createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug)
   chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug)
 
-  let hotkeys = new Hotkeys()
-  hotkeys.register([UiohookKey.Alt, UiohookKey.Period], chat.toggleLock)
-  hotkeys.register([UiohookKey.Alt, UiohookKey.Comma], chat.toggleShow)
-  hotkeys.register([UiohookKey.Alt, UiohookKey.Slash], toggleDevTools)
-  hotkeys.register([UiohookKey.Alt, UiohookKey.ArrowUp], chat.scrollUp)
-  hotkeys.register([UiohookKey.Alt, UiohookKey.ArrowDown], chat.scrollDown)
-  
-  hotkeys.registerScroll([UiohookKey.Alt], chat.scrollUp, chat.scrollDown)
-
-  hotkeys.run()
+  setupHotkeys()
 
 });
 
@@ -115,3 +106,52 @@ ipcMain.handle(channels.CLOSE_APP, () => {
 ipcMain.handle(channels.MINIMIZE_APP, () => {
   mainWindow.minimize()
 })
+
+
+// HOTKEYS
+let hotkeys: Hotkeys
+
+const setupShowHotkey = async (key_map: number[]) => {
+  hotkeys.register(key_map, chat.toggleShow)
+}
+
+const setupLockHotkey = async (key_map: number[]) => {
+  hotkeys.register(key_map, chat.toggleLock)
+}
+
+const setupScrollUpHotkey = async (key_map: number[]) => {
+  hotkeys.register(key_map, chat.scrollUp)
+}
+
+const setupScrollDownHotkey = async (key_map: number[]) => {
+  hotkeys.register(key_map, chat.scrollDown)
+}
+
+const setupScrollWheelHotkey = async (key_map: number[]) => {
+  hotkeys.registerScroll(key_map, chat.scrollUp, chat.scrollDown)
+}
+
+const setupDevToolsHotkey = async (key_map: number[]) => {
+  hotkeys.register(key_map, toggleDevTools)
+}
+
+const setupHotkeys = async () => {
+  hotkeys = new Hotkeys()
+  
+  let hotkeyShow = await settings.get('hotkeys.show') as number[]
+  let hotkeyLock = await settings.get('hotkeys.lock') as number[]
+  setupShowHotkey(hotkeyShow)
+  setupLockHotkey(hotkeyLock)
+
+  let hotkeyScrollUp = await settings.get('hotkeys.scrollUp') as number[]
+  let hotkeyScrollDown = await settings.get('hotkeys.scrollDown') as number[]
+  let hotKeyScrollWheel = await settings.get('hotkeys.scrollWheel') as number[]
+  setupScrollUpHotkey(hotkeyScrollUp)
+  setupScrollDownHotkey(hotkeyScrollDown)
+  setupScrollWheelHotkey(hotKeyScrollWheel)
+
+  let hotKeyDevTools = await settings.get('hotkeys.devTools') as number[]
+  setupDevToolsHotkey(hotKeyDevTools)
+  
+  hotkeys.run()
+}

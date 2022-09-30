@@ -46,8 +46,12 @@ var settingsConfig = {
 };
 var defaults = {
     hotkeys: {
-    // lock: DEFAULT_KEYMAP.LOCK,
-    // hide: DEFAULT_KEYMAP.HIDE
+        show: [56, 51],
+        lock: [56, 52],
+        scrollUp: [56, 57416],
+        scrollDown: [56, 57424],
+        scrollWheel: [56],
+        devTools: [56, 53]
     },
     channel: {
         username: '',
@@ -165,30 +169,11 @@ var setup = function (debug) {
             settings.configure(settingsConfig);
             return [2 /*return*/, new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, settings.has('hotkeys')];
-                            case 1:
-                                if (!!(_a.sent())) return [3 /*break*/, 3];
-                                if (debug)
-                                    console.log('Using default hotkeys');
-                                return [4 /*yield*/, settings.set('hotkeys', defaults.hotkeys)];
-                            case 2:
-                                _a.sent();
-                                _a.label = 3;
-                            case 3: return [4 /*yield*/, settings.has('channel')];
-                            case 4:
-                                if (!!(_a.sent())) return [3 /*break*/, 6];
-                                if (debug)
-                                    console.log('Using default channel');
-                                return [4 /*yield*/, settings.set('channel', defaults.channel)];
-                            case 5:
-                                _a.sent();
-                                _a.label = 6;
-                            case 6:
-                                validateChat();
-                                resolve(true);
-                                return [2 /*return*/];
-                        }
+                        (0, exports.validateHotkeys)();
+                        (0, exports.validateChannel)();
+                        validateChat();
+                        resolve(true);
+                        return [2 /*return*/];
                     });
                 }); })];
         });
