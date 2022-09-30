@@ -5,3 +5,41 @@ declare interface Window {
     },
     settings: any
 }
+
+declare type chatSettings = {
+  emotes: {
+    twitch: {
+      global: {
+
+      },
+      channel: {
+
+      }
+    },
+    bttv: {
+      global: {
+
+      },
+      channel: {
+
+      }
+    },
+    ffz: {
+      channel: {
+
+      }
+    }
+
+  },
+  badges: {
+    twitch: {
+      global: {
+
+      }
+      channel: {
+        
+      }
+    }
+  },
+  mutedUsers: string[]
+}
