@@ -38,6 +38,8 @@ export const connect = async (username: string, _chatWebContents: WebContents, _
     let channelname = await settings.get('channel.displayname')
     let pfp = await settings.get('channel.pfp')
 
+    let fadeDelay = await settings.get('chat.fade')
+
     _mainWebContetnts.send('updateChannelUI', channelname, pfp)
 
     chatWebContents = _chatWebContents

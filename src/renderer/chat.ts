@@ -1,3 +1,4 @@
+import { timers } from "jquery";
 import { ChatUserstate, Badges } from "tmi.js";
 import * as api from '../main/api'
 
@@ -20,10 +21,12 @@ const toggleLock = () => {
 const scrollStep: number = 36
 var scrollPaused: boolean = false
 var pauseTime: number = 5 // in seconds
+var timeoutID: ReturnType<typeof setTimeout>
 
 const tempPauseScroll = () => {
+    clearTimeout(timeoutID)
     scrollPaused = true
-    setTimeout(()=> {
+    timeoutID = setTimeout(()=> {
         scrollPaused = false
     }, pauseTime*1000)
 }
@@ -302,6 +305,11 @@ const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
     // scrolls down
     if(!scrollPaused)
         chatBox.scrollTop = chatBox.scrollHeight
+
+    // resets fade timer
+    fadeTimer.reset()
+    // fades in chat on every new message
+    $('.chat-text').fadeIn()
 }
 
 const setFontSize = (event: any, fontSize: number) => {
@@ -312,8 +320,43 @@ const setOpacity = (event: any, opacity: number) => {
     $('.chat-text').css('opacity', opacity)
 }
 
+const fadeChat = () => {
+    console.log('fading out chat')
+    $('.chat-text').fadeOut()
+}
+
+class Timer {
+
+    private time: number // in seconds
+    private action: Function
+    private timeout: ReturnType<typeof setTimeout>
+
+    public constructor (action: () => void) {
+        this.action = action
+    }
+
+    public start(seconds: number) {
+        this.time = seconds
+        this.reset()
+    }
+
+    public reset() {
+        clearTimeout(this.timeout)
+        this.timer(this.time)
+    }
+    private timer = (time: number) => {
+        if(time != 0)
+            this.timeout = setTimeout(() => {
+                this.action()
+            }, time*1000)
+    }
+}
+
+let fadeTimer  = new Timer(fadeChat)
+
 const setFadeDelay = (event: any, fadeDelay: number) => {
-    // TODO
+    $('.chat-text').fadeIn()
+    fadeTimer.start(fadeDelay)
 }
 const loadSettings = (event: any, fontSize: number, opacity: number, fadeDelay: number) => {
 

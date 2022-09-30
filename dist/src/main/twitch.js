@@ -57,7 +57,7 @@ var msgHandler = function (channel, context, msg, self) {
 };
 exports.msgHandler = msgHandler;
 var connect = function (username, _chatWebContents, _mainWebContetnts) { return __awaiter(void 0, void 0, void 0, function () {
-    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers, channelname, pfp;
+    var globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers, channelname, pfp, fadeDelay;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -96,6 +96,9 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
                 return [4 /*yield*/, settings.get('channel.pfp')];
             case 11:
                 pfp = _a.sent();
+                return [4 /*yield*/, settings.get('chat.fade')];
+            case 12:
+                fadeDelay = _a.sent();
                 _mainWebContetnts.send('updateChannelUI', channelname, pfp);
                 chatWebContents = _chatWebContents;
                 chatWebContents.send('updateBadgesEmotesMuted', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers);

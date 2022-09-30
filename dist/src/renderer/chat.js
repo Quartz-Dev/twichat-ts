@@ -52,9 +52,11 @@ var toggleLock = function () {
 var scrollStep = 36;
 var scrollPaused = false;
 var pauseTime = 5; // in seconds
+var timeoutID;
 var tempPauseScroll = function () {
+    clearTimeout(timeoutID);
     scrollPaused = true;
-    setTimeout(function () {
+    timeoutID = setTimeout(function () {
         scrollPaused = false;
     }, pauseTime * 1000);
 };
@@ -281,6 +283,10 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
                 // scrolls down
                 if (!scrollPaused)
                     chatBox.scrollTop = chatBox.scrollHeight;
+                // resets fade timer
+                fadeTimer.reset();
+                // fades in chat on every new message
+                $('.chat-text').fadeIn();
                 return [2 /*return*/];
         }
     });
@@ -291,8 +297,35 @@ var setFontSize = function (event, fontSize) {
 var setOpacity = function (event, opacity) {
     $('.chat-text').css('opacity', opacity);
 };
+var fadeChat = function () {
+    console.log('fading out chat');
+    $('.chat-text').fadeOut();
+};
+var Timer = /** @class */ (function () {
+    function Timer(action) {
+        var _this = this;
+        this.timer = function (time) {
+            if (time != 0)
+                _this.timeout = setTimeout(function () {
+                    _this.action();
+                }, time * 1000);
+        };
+        this.action = action;
+    }
+    Timer.prototype.start = function (seconds) {
+        this.time = seconds;
+        this.reset();
+    };
+    Timer.prototype.reset = function () {
+        clearTimeout(this.timeout);
+        this.timer(this.time);
+    };
+    return Timer;
+}());
+var fadeTimer = new Timer(fadeChat);
 var setFadeDelay = function (event, fadeDelay) {
-    // TODO
+    $('.chat-text').fadeIn();
+    fadeTimer.start(fadeDelay);
 };
 var loadSettings = function (event, fontSize, opacity, fadeDelay) {
     setFontSize(null, fontSize);
