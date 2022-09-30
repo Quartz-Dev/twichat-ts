@@ -303,7 +303,7 @@ var Timer = /** @class */ (function () {
     function Timer(action) {
         var _this = this;
         this.timer = function (time) {
-            if (time != 0)
+            if (time != 0 && time)
                 _this.timeout = setTimeout(function () {
                     _this.action();
                 }, time * 1000);

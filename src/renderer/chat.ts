@@ -343,7 +343,7 @@ class Timer {
         this.timer(this.time)
     }
     private timer = (time: number) => {
-        if(time != 0)
+        if(time != 0 && time)
             this.timeout = setTimeout(() => {
                 this.action()
             }, time*1000)
