@@ -121,8 +121,14 @@ $(".selected-channel-container").on('focusout', function (event) {
 function setChannel(username) {
     window.api.send('setChannel', username);
 }
+var userNotFound = function () {
+    $('.pfp').attr('src', '');
+    $('#channel-name-text').trigger('focus');
+    $('#channel-name-text').trigger('select');
+};
 window.api.receive('settings', updateSettingsInputs);
 window.api.receive('updateShowSwitch', updateShowSwitch);
 window.api.receive('updateLockSwitch', updateLockSwitch);
 window.api.receive('updateChannelUI', updateChannelUI);
+window.api.receive('userNotFound', userNotFound);
 //# sourceMappingURL=desktop.js.map

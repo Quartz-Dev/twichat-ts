@@ -66,7 +66,6 @@ var scrollUp = function () {
     tempPauseScroll();
 };
 var scrollDown = function () {
-    console.log('scrollDown');
     chatBox.scrollTop = (chatBox.scrollTop + scrollStep);
     tempPauseScroll();
 };
@@ -298,7 +297,6 @@ var setOpacity = function (event, opacity) {
     $('.chat-text').css('opacity', opacity);
 };
 var fadeChat = function () {
-    console.log('fading out chat');
     $('.chat-text').fadeOut();
 };
 var Timer = /** @class */ (function () {

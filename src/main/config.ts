@@ -124,8 +124,10 @@ import * as api from './api'
 export function refreshApiData(username: string) {
 
     return new Promise( async (resolve, reject) => {
-        let data = (await api.fetchData(username)) as api.Data
-        await saveChatSettings(data)
+        let userData = (await api.fetchData(username)) as any
+        if(!userData)
+            return resolve(false)
+        await saveChatSettings(userData as api.Data)        
         resolve(true)
     })
 

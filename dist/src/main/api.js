@@ -6,10 +6,9 @@ function fetch(url) {
     return new Promise(function (resolve, reject) {
         axios_1["default"].get(url)
             .then(function (res) {
-            res.status == 200 ? resolve(res.data) : resolve(null);
+            res.status == 200 ? resolve(res.data) : resolve(false);
         })["catch"](function (err) {
-            console.log(err);
-            resolve(null);
+            resolve(false);
         });
     });
 }

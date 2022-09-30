@@ -201,13 +201,15 @@ var api = require("./api");
 function refreshApiData(username) {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-        var data;
+        var userData;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, api.fetchData(username)];
                 case 1:
-                    data = (_a.sent());
-                    return [4 /*yield*/, saveChatSettings(data)];
+                    userData = (_a.sent());
+                    if (!userData)
+                        return [2 /*return*/, resolve(false)];
+                    return [4 /*yield*/, saveChatSettings(userData)];
                 case 2:
                     _a.sent();
                     resolve(true);

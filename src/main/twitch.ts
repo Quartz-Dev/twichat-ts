@@ -25,8 +25,9 @@ export const connect = async (username: string, _chatWebContents: WebContents, _
 
     if(client) await disconnect()
 
-    await refreshApiData(username)
+    let userExists = await refreshApiData(username)
 
+    if(!userExists) return _mainWebContetnts.send('userNotFound')
 
     let globalTwitchBadges = await settings.get('global.badges.twitch')
     let channelTwitchBadges = await settings.get('channel.badges.twitch')
@@ -37,8 +38,6 @@ export const connect = async (username: string, _chatWebContents: WebContents, _
 
     let channelname = await settings.get('channel.displayname')
     let pfp = await settings.get('channel.pfp')
-
-    let fadeDelay = await settings.get('chat.fade')
 
     _mainWebContetnts.send('updateChannelUI', channelname, pfp)
 
