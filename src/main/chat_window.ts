@@ -141,19 +141,19 @@ export const launch = async (webContents: WebContents, fontSize: number, opacity
     createWindow(fontSize, opacity, fadeDelay, debug)
 }
 
-const updateFontSize = (event: any, fontSize: number) => {
+const updateFontSize = async (event: any, fontSize: number) => {
     chatWindow.webContents.send('setFontSize', fontSize)
-    settings.set('chat.size', fontSize)
+    await settings.set('chat.size', fontSize).catch((e: unknown) => {})
 }
 
-const updateOpacity = (event: any, opacity: number) => {
+const updateOpacity = async (event: any, opacity: number) => {
     chatWindow.webContents.send('setOpacity', opacity)
-    settings.set('chat.opacity', opacity)
+    await settings.set('chat.opacity', opacity).catch((e: unknown) => {})
 }
 
-const updateFadeDelay = (event: any, fadeDelay: number) => {
+const updateFadeDelay = async (event: any, fadeDelay: number) => {
     chatWindow.webContents.send('setFadeDelay', fadeDelay)
-    settings.set('chat.fade', fadeDelay)
+    await settings.set('chat.fade', fadeDelay).catch((e: unknown) => {console.log(e)})
 }
 
 const handleCMDS = (cmd: string) => {
