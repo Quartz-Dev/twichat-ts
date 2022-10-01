@@ -121,7 +121,7 @@ electron_1.app.on("ready", function () {
                     return [4 /*yield*/, settings.get('chat.fade')];
                 case 4:
                     fadeDelay = (_a.sent());
-                    return [4 /*yield*/, settings.get('channel.username')];
+                    return [4 /*yield*/, settings.get('channel.displayname')];
                 case 5:
                     channelname = (_a.sent());
                     return [4 /*yield*/, settings.get('channel.pfp')];

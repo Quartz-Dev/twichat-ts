@@ -82,7 +82,7 @@ app.on("ready", async function () {
   let fontSize = (await settings.get('chat.size')) as number
   let opacity = (await settings.get('chat.opacity')) as number
   let fadeDelay = (await settings.get('chat.fade')) as number
-  let channelname = (await settings.get('channel.username')) as string
+  let channelname = (await settings.get('channel.displayname')) as string
   let pfp = (await settings.get('channel.pfp')) as string
   
   createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug)
