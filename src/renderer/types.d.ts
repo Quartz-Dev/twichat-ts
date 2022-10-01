@@ -3,7 +3,9 @@ declare interface Window {
       send: (channel: string, ...arg: any) => void;
       receive: (channel: string, func: (event: any, ...arg: any) => void) => void;
     },
-    settings: any
+    shell: {
+      openExternal: (href: string) => void;
+    }
 }
 
 declare type chatSettings = {

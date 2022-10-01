@@ -128,6 +128,10 @@ var userNotFound = function () {
     $('#channel-name-text').trigger('focus');
     $('#channel-name-text').trigger('select');
 };
+$(document).on('click', 'a[href^="https"]', function (event) {
+    event.preventDefault();
+    window.shell.openExternal(this.href);
+});
 window.api.receive('settings', updateSettingsInputs);
 window.api.receive('updateShowSwitch', updateShowSwitch);
 window.api.receive('updateLockSwitch', updateLockSwitch);

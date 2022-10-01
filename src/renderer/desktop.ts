@@ -144,7 +144,7 @@ $(".selected-channel-container").on('focusout', function (event) {
 
 function setChannel(username: string) {
     username = username.replace(/\s+/g, '')
-    
+
     window.api.send('setChannel', username)
 }
 
@@ -154,6 +154,11 @@ const userNotFound = () => {
     $('#channel-name-text').trigger('focus')
     $('#channel-name-text').trigger('select')
 }
+
+$(document).on('click', 'a[href^="https"]', function(event) {
+    event.preventDefault()
+    window.shell.openExternal(this.href)
+})
 
 window.api.receive('settings', updateSettingsInputs)
 window.api.receive('updateShowSwitch', updateShowSwitch)
