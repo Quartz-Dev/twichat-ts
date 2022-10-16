@@ -81,6 +81,7 @@ body {
     margin-top: -5px;
     vertical-align: text-bottom;
     margin-bottom: -5px;
+    padding: 3px;
   }
   
   .badge{

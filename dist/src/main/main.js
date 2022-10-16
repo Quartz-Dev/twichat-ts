@@ -44,6 +44,64 @@ var chat = require("./chat_window");
 var config = require("./config");
 var constants_1 = require("../shared/constants");
 var settings = require("electron-settings");
+// IDK IF THIS WORKS YET
+if (require('electron-squirrel-startup'))
+    electron_1.app.quit();
+// this should be placed at top of main.js to handle setup events quickly
+if (handleSquirrelEvent()) {
+    // squirrel event handled and app will exit in 1000ms, so don't do anything else
+    // return;
+}
+// IDK IF THIS WORKS YET
+function handleSquirrelEvent() {
+    if (process.argv.length === 1) {
+        return false;
+    }
+    var ChildProcess = require('child_process');
+    var path = require('path');
+    var appFolder = path.resolve(process.execPath, '..');
+    var rootAtomFolder = path.resolve(appFolder, '..');
+    var updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+    var exeName = path.basename(process.execPath);
+    var spawn = function (command, args) {
+        var spawnedProcess, error;
+        try {
+            spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
+        }
+        catch (error) { }
+        return spawnedProcess;
+    };
+    var spawnUpdate = function (args) {
+        return spawn(updateDotExe, args);
+    };
+    var squirrelEvent = process.argv[1];
+    switch (squirrelEvent) {
+        case '--squirrel-install':
+        case '--squirrel-updated':
+            // Optionally do things such as:
+            // - Add your .exe to the PATH
+            // - Write to the registry for things like file associations and
+            //   explorer context menus
+            // Install desktop and start menu shortcuts
+            spawnUpdate(['--createShortcut', exeName]);
+            setTimeout(electron_1.app.quit, 1000);
+            return true;
+        case '--squirrel-uninstall':
+            // Undo anything you did in the --squirrel-install and
+            // --squirrel-updated handlers
+            // Remove desktop and start menu shortcuts
+            spawnUpdate(['--removeShortcut', exeName]);
+            setTimeout(electron_1.app.quit, 1000);
+            return true;
+        case '--squirrel-obsolete':
+            // This is called on the outgoing version of your app before
+            // we update to the new version - it's the opposite of
+            // --squirrel-updated
+            electron_1.app.quit();
+            return true;
+    }
+}
+;
 // IF TRUE TURNS ON DEV TOOLS FOR BOTH WINDOWS
 var debug = false;
 var mainWindow;
