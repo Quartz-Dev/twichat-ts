@@ -13,7 +13,7 @@ function fetch(url: string) {
 }
 
 export function fetchData(username: string) {
-    let url = `https://api.jgdif.com/twitch/user/${username}`
+    let url = `http://10.0.1.198/twitch/user/${username}`
     return fetch(url)
 }
 

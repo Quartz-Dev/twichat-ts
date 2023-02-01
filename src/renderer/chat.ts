@@ -65,7 +65,10 @@ var nonFirstTimeChatters: Set<string> = new Set()
 
 const clear = () => {
 
+    // gets chatbox element
     chatBox = (document.getElementById('chat-box')) as HTMLDivElement
+
+    // clears chatbox conten
     if(chatBox) chatBox.innerHTML = ''
 }
 
@@ -73,9 +76,12 @@ const buildLine = () => {
 
     // create line element
     let newLine = document.createElement('li')
+
+    // adds classes
     newLine.classList.add('message-line')
     newLine.classList.add('doublespace')
 
+    // returns line element
     return newLine
 }
 
@@ -97,14 +103,19 @@ const buildBadges = async (badges: Badges) => {
         let value = badges[key]
         let badge = document.createElement('img')
         badge.classList.add('badge')
-
+        console.log(globalTwitchBadges[key]['versions'])
         // if subscriber badge
         if(key == 'subscriber')
             // checks to make sure channel has custom sub badges if not use twitch defaults
-            if(channelTwitchBadges[key])
+            if(channelTwitchBadges[key] && channelTwitchBadges[key]['versions'][value])
                 badge.src = channelTwitchBadges[key]['versions'][value]['image_url_1x']
-            else
+            else {
+                // twitch global badges only has a 1yr sub badge
+                // anything larger than 6 (1yr) will round down to 1yr badge
+                // - only occurs if subscriber badges failed to load so using twitches default sub badges
+                if(parseInt(value) > 6) value = '6'
                 badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x']
+            }
         // if bits badge
         else if(key == 'bits')
             // checks to make sure channel has custom bit badges if not use twitch defaults
@@ -113,8 +124,13 @@ const buildBadges = async (badges: Badges) => {
             else
                 badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x']
         // all other badges use twitch global badges
-        else
+        else {
+            // twitch global badges only has a 5mil bit badge
+            // anything larger than 5mil will round down to 5mil badge
+            // - only occurs if bit badges failed to load so using twitches default bit badges
+            if(parseInt(value) > 5000000) value = '5000000'
             badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x']
+        }
         // adds badge to html badge list
         badgesHTML.push(badge)
     }
@@ -131,10 +147,7 @@ const buildUsernameHTML = (username: string, color: string) => {
 
     return span
 }
-
-var bttvGlobalEmotes: api.bttvEmoteList
-var bttvChannelEmotes: api.bttvEmoteList
-
+ 
 const buildTextHTML = (msg: string) => {
     let textHTML = document.createElement('span')
     textHTML.classList.add('message')
@@ -177,6 +190,8 @@ const buildFFZHTML = (emoteId: string) => {
 
 const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUserstate) => {
 
+    // gets twitch emotes parsing instructions
+    // - tmi.js has twitch emotes built in
     var emotes = context['emotes']
     var span;
 
@@ -242,7 +257,7 @@ const parseEmotes = (messageHTML: HTMLSpanElement, msg: string, context: ChatUse
         span = buildTextHTML(workingMsg)
         messageHTML.append(span)
     }
-
+    
     return messageHTML
 }
 
@@ -275,8 +290,14 @@ const addLine = async (event: any, msg: string,  context: ChatUserstate) => {
     let newLine = buildLine()
 
     // adds badges 
-    let badgeList = await buildBadges(context['badges'])
-    if(badgeList) badgeList.forEach(badge => newLine.append(badge));
+    try {
+        let badgeList = await buildBadges(context['badges'])
+        if(badgeList) badgeList.forEach(badge => newLine.append(badge));
+    } catch( err) {
+        console.log('===[ Error Loading Badges ]===')
+        console.log(err)
+        console.log('===[ ==================== ]===')
+    }
 
     // adds username
     let username = buildUsernameHTML(context['display-name'], context['color'])
@@ -356,6 +377,7 @@ const setFadeDelay = (event: any, fadeDelay: number) => {
     $('.chat-text').fadeIn()
     fadeTimer.start(fadeDelay)
 }
+
 const loadSettings = (event: any, fontSize: number, opacity: number, fadeDelay: number) => {
 
     setFontSize(null, fontSize)

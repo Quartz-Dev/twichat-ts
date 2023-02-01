@@ -13,7 +13,7 @@ function fetch(url) {
     });
 }
 function fetchData(username) {
-    var url = "https://api.jgdif.com/twitch/user/".concat(username);
+    var url = "http://10.0.1.198/twitch/user/".concat(username);
     return fetch(url);
 }
 exports.fetchData = fetchData;

@@ -87,15 +87,19 @@ var updateBadgesEmotesMuted = function (event, _globalTwitchBadges, _channelTwit
 var chatBox;
 var nonFirstTimeChatters = new Set();
 var clear = function () {
+    // gets chatbox element
     chatBox = (document.getElementById('chat-box'));
+    // clears chatbox conten
     if (chatBox)
         chatBox.innerHTML = '';
 };
 var buildLine = function () {
     // create line element
     var newLine = document.createElement('li');
+    // adds classes
     newLine.classList.add('message-line');
     newLine.classList.add('doublespace');
+    // returns line element
     return newLine;
 };
 var buildBadges = function (badges) { return __awaiter(void 0, void 0, void 0, function () {
@@ -113,13 +117,20 @@ var buildBadges = function (badges) { return __awaiter(void 0, void 0, void 0, f
             value = badges[key];
             badge = document.createElement('img');
             badge.classList.add('badge');
+            console.log(globalTwitchBadges[key]['versions']);
             // if subscriber badge
             if (key == 'subscriber')
                 // checks to make sure channel has custom sub badges if not use twitch defaults
-                if (channelTwitchBadges[key])
+                if (channelTwitchBadges[key] && channelTwitchBadges[key]['versions'][value])
                     badge.src = channelTwitchBadges[key]['versions'][value]['image_url_1x'];
-                else
+                else {
+                    // twitch global badges only has a 1yr sub badge
+                    // anything larger than 6 (1yr) will round down to 1yr badge
+                    // - only occurs if subscriber badges failed to load so using twitches default sub badges
+                    if (parseInt(value) > 6)
+                        value = '6';
                     badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x'];
+                }
             // if bits badge
             else if (key == 'bits')
                 // checks to make sure channel has custom bit badges if not use twitch defaults
@@ -128,8 +139,14 @@ var buildBadges = function (badges) { return __awaiter(void 0, void 0, void 0, f
                 else
                     badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x'];
             // all other badges use twitch global badges
-            else
+            else {
+                // twitch global badges only has a 5mil bit badge
+                // anything larger than 5mil will round down to 5mil badge
+                // - only occurs if bit badges failed to load so using twitches default bit badges
+                if (parseInt(value) > 5000000)
+                    value = '5000000';
                 badge.src = globalTwitchBadges[key]['versions'][value]['image_url_1x'];
+            }
             // adds badge to html badge list
             badgesHTML.push(badge);
         }
@@ -144,8 +161,6 @@ var buildUsernameHTML = function (username, color) {
     span.innerText = username;
     return span;
 };
-var bttvGlobalEmotes;
-var bttvChannelEmotes;
 var buildTextHTML = function (msg) {
     var textHTML = document.createElement('span');
     textHTML.classList.add('message');
@@ -174,6 +189,8 @@ var buildFFZHTML = function (emoteId) {
     return img;
 };
 var parseEmotes = function (messageHTML, msg, context) {
+    // gets twitch emotes parsing instructions
+    // - tmi.js has twitch emotes built in
     var emotes = context['emotes'];
     var span;
     var emoteNames = {};
@@ -244,7 +261,7 @@ var buildMessage = function (msg, context) {
     return messageHTML;
 };
 var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, void 0, function () {
-    var newLine, badgeList, username, message, allLines;
+    var newLine, badgeList, err_1, username, message, allLines;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -259,11 +276,22 @@ var addLine = function (event, msg, context) { return __awaiter(void 0, void 0, 
                     return [2 /*return*/];
                 chatBox = (document.getElementById('chat-box'));
                 newLine = buildLine();
-                return [4 /*yield*/, buildBadges(context['badges'])];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, buildBadges(context['badges'])];
+            case 2:
                 badgeList = _a.sent();
                 if (badgeList)
                     badgeList.forEach(function (badge) { return newLine.append(badge); });
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                console.log('===[ Error Loading Badges ]===');
+                console.log(err_1);
+                console.log('===[ ==================== ]===');
+                return [3 /*break*/, 4];
+            case 4:
                 username = buildUsernameHTML(context['display-name'], context['color']);
                 newLine.append(username);
                 newLine.append(':');

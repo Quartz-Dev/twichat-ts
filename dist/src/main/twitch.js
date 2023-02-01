@@ -69,11 +69,13 @@ var connect = function (username, _chatWebContents, _mainWebContetnts) { return 
             case 1:
                 _a.sent();
                 _a.label = 2;
-            case 2: return [4 /*yield*/, (0, config_1.refreshApiData)(username)];
+            case 2: return [4 /*yield*/, (0, config_1.refreshApiData)(username)
+                // if(!userExists) return _mainWebContetnts.send('userNotFound')
+            ];
             case 3:
                 userExists = _a.sent();
-                if (!userExists)
-                    return [2 /*return*/, _mainWebContetnts.send('userNotFound')];
+                // if(!userExists) return _mainWebContetnts.send('userNotFound')
+                console.log('YOOOO');
                 return [4 /*yield*/, settings.get('global.badges.twitch')];
             case 4:
                 globalTwitchBadges = _a.sent();
