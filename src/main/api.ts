@@ -1,5 +1,8 @@
 import axios from 'axios'
 
+const api_domain = `https://twichat-api-js.vercel.app`
+// const api_domain = `https://api.quartzdev.gg`
+
 function fetch(url: string) {
     return new Promise((resolve, reject) => {
         axios.get(url)
@@ -13,7 +16,7 @@ function fetch(url: string) {
 }
 
 export function fetchData(username: string) {
-    let url = `http://10.0.1.198/twitch/user/${username}`
+    let url = `${api_domain}/twitch/user/${username}`
     return fetch(url)
 }
 
