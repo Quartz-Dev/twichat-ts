@@ -98,6 +98,7 @@ var buildLine = function () {
     var newLine = document.createElement('li');
     // adds classes
     newLine.classList.add('message-line');
+    newLine.classList.add('chat-text');
     newLine.classList.add('doublespace');
     // returns line element
     return newLine;

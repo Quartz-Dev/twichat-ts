@@ -79,14 +79,17 @@ body {
   
   .emote{
     margin-top: -5px;
-    vertical-align: text-bottom;
-    margin-bottom: -5px;
+    vertical-align: middle;
+    margin-bottom: -1px;
     padding: 3px;
   }
   
   .badge{
     padding-left: 1px;
     padding-right: 1px;
+    margin-top: -5px;
+    vertical-align: middle;
+    margin-bottom: -1px;
     width: 1em;
     height: 1em;
   }
@@ -94,7 +97,12 @@ body {
   .message {
     margin-left: 5px;
   }
-  
+
+  .username {
+    margin-left: 4px;
+    margin-right: 2px;
+  }
+
   .highlight {
     background-color: rgba(161, 66, 255, 0.5);
   }
