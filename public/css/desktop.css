@@ -2,16 +2,15 @@
 
 :root {
     --background-color: #232229;
+    --border-color: #18172c;
     --lighter-bg-color: rgba(62, 62, 70, .5);
+    --switch-off-color: #434257;
     --accent-color: #7546c0;
     --text-color: white;
     --lighter-text-color: rgb(189, 193, 204);
+    
     --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --footer-font-size: 10pt;
-    --pink: 
-    --gray: #434257;
-    --blue: #18172c;
-    --green: #00d084;
   }
   
   /* page setup */
@@ -206,7 +205,7 @@
   
   .pfp {
     border-radius: 50%;
-    border: 2px solid var(--blue);
+    border: 2px solid var(--border-color);
     width: 200px;
     height: auto;
     user-select: none;
@@ -321,9 +320,9 @@
     width: 80px;
     text-align: center;
     vertical-align: middle;
-    background-color: var(--gray);
+    background-color: var(--switch-off-color);
     outline: none;
-    border: 2px solid var(--blue);
+    border: 2px solid var(--border-color);
     cursor: pointer;
   }
   
@@ -347,7 +346,7 @@
     border-radius: 15px;
     border: 2px solid var(--blue);
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
-    background: var(--gray);
+    background: var(--switch-off-color);
     transition: all 0.3s;
   }
    
