@@ -44,17 +44,17 @@ export default class Hotkeys {
             if(debug) console.log(`Let Go: ${getKeyFromCode(key)}`)
         })
 
-        // uIOhook.on('wheel', event => {
-        //     let direction = event.rotation === 1 ? 'DOWN' : 'UP'
-        //     this.scroll_hotkey_map.forEach((actions, hotkeys: number[]) => {
-        //         if(hotkeys.every(key => this.keys_pressed.includes(key))) {
-        //             let action: Function
-        //             if(direction === 'UP') action = actions[0]
-        //             if(direction === 'DOWN') action = actions[1]
-        //             action()
-        //         }
-        //     })
-        // })
+        uIOhook.on('wheel', event => {
+            let direction = event.rotation === 1 ? 'DOWN' : 'UP'
+            this.scroll_hotkey_map.forEach((actions, hotkeys: number[]) => {
+                if(hotkeys.every(key => this.keys_pressed.includes(key))) {
+                    let action: Function
+                    if(direction === 'UP') action = actions[0]
+                    if(direction === 'DOWN') action = actions[1]
+                    action()
+                }
+            })
+        })
 
         uIOhook.start()
     }

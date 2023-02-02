@@ -46,19 +46,17 @@ var Hotkeys = /** @class */ (function () {
                 if (debug)
                     console.log("Let Go: ".concat(getKeyFromCode(key)));
             });
-            uiohook_napi_1.uIOhook.on('wheel', function (event) {
-                var direction = event.rotation === 1 ? 'DOWN' : 'UP';
-                _this.scroll_hotkey_map.forEach(function (actions, hotkeys) {
-                    if (hotkeys.every(function (key) { return _this.keys_pressed.includes(key); })) {
-                        var action = void 0;
-                        if (direction === 'UP')
-                            action = actions[0];
-                        if (direction === 'DOWN')
-                            action = actions[1];
-                        action();
-                    }
-                });
-            });
+            // uIOhook.on('wheel', event => {
+            //     let direction = event.rotation === 1 ? 'DOWN' : 'UP'
+            //     this.scroll_hotkey_map.forEach((actions, hotkeys: number[]) => {
+            //         if(hotkeys.every(key => this.keys_pressed.includes(key))) {
+            //             let action: Function
+            //             if(direction === 'UP') action = actions[0]
+            //             if(direction === 'DOWN') action = actions[1]
+            //             action()
+            //         }
+            //     })
+            // })
             uiohook_napi_1.uIOhook.start();
         };
         this.stop = function () {
