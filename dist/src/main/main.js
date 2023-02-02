@@ -158,8 +158,9 @@ var createMainWindow = function (channelname, pfp, fontSize, opacity, fadeDelay,
         });
     });
     // Open the DevTools.
-    // if(debug) mainWindow.webContents.openDevTools();
-    mainWindow.webContents.openDevTools();
+    if (debug)
+        mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
 };
 // app.disableHardwareAcceleration()
 electron_1.app.on("ready", function () {
