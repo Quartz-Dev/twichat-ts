@@ -2,14 +2,14 @@
     display: flex;
     align-items: center;
     z-index: 9999;
-    background-color: #232229;
+    background-color: #ffccd0;
     -webkit-app-region: drag;
   }
   
   .app-header h1 {
     font-style: normal;
     font-weight: normal;
-    color: #8d8d8d;
+    color: #463232a2;
     font-size: 14px;
     flex-grow: 1;
     cursor: inherit;
@@ -37,7 +37,7 @@
   }
   .window-control:hover,
   .window-control:active {
-    background-color: #464646;
+    background-color: #46323231;
   }
   .window-control:before {
     display: block;
@@ -46,12 +46,12 @@
     height: 30px;
     mask: url('../img/window_minimize.svg') center center no-repeat;
     -webkit-mask: url('../img/window_minimize.svg') center center no-repeat;
-    background-color: #a8a8a8;
+    background-color: #463232a2;
     transition: inherit;
   }
   .window-control:hover:before,
   .window-control:active:before {
-    background-color: #dedede;
+    background-color: #463232a2;
   }
   .window-control-minimize:before {
     mask-image: url('../img/window_minimize.svg');
@@ -76,7 +76,7 @@
   
   .window-control-close:hover,
   .window-control-close:active {
-    background-color: #a04744;
+    background-color: #a04744c2;
   }
   .window-control-close:hover:before,
   .window-control-close:active:before {
