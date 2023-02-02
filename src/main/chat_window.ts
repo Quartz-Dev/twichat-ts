@@ -79,7 +79,8 @@ export const createWindow = async (fontSize: number, opacity: number, fadeDelay:
         twitch.connect(channelname, chatWindow.webContents, mainWebContents)
         
         //   Open the DevTools.
-        if(debug) chatWindow.webContents.openDevTools();
+        // if(debug) chatWindow.webContents.openDevTools();
+        chatWindow.webContents.openDevTools();
       })
 
     // default opens as locked

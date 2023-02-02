@@ -140,7 +140,8 @@ const createMainWindow = (channelname: string, pfp: string, fontSize: number, op
   })
 
   // Open the DevTools.
-  if(debug) mainWindow.webContents.openDevTools();
+  // if(debug) mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // app.disableHardwareAcceleration()
