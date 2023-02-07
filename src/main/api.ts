@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const api_domain = `https://twichat-api-js.vercel.app`
-// const api_domain = `https://api.quartzdev.gg`
+// const api_domain = `https://twichat-api-js.vercel.app`
+const api_domain = `https://api.quartzdev.gg`
 
 function fetch(url: string) {
     return new Promise((resolve, reject) => {
