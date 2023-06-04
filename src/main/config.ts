@@ -23,7 +23,8 @@ const defaults: any = {
         pfp: '',
         emotes: {
             bttv: {},
-            ffz: {}
+            ffz: {},
+            tvtv: {}
         },
         badges: {
             twitch: {}
@@ -35,6 +36,7 @@ const defaults: any = {
         },
         emotes: {
             bttv: {}
+            tvtv: {}
         }
     },
     chat: {
@@ -140,9 +142,11 @@ async function saveChatSettings(data: api.Data) {
         await settings.set('channel.pfp', (data.pfp).toString())
         await settings.set('channel.emotes.bttv', data.emotes.bttv.channel)
         await settings.set('channel.emotes.ffz', data.emotes.ffz.channel)
+        await settings.set('channel.emotes.tvtv', data.emotes.tvtv.channel)
         await settings.set('channel.badges.twitch', data.badges.channel)
         await settings.set('global.badges.twitch', (data.badges.global))
         await settings.set('global.emotes.bttv', data.emotes.bttv.global)
+        await settings.set('global.emotes.tvtv', data.emotes.tvtv.global)
         resolve(true)
     })
 }

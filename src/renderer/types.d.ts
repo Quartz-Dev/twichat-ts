@@ -30,6 +30,14 @@ declare type chatSettings = {
       channel: {
 
       }
+    },
+    tvtv: {
+      global:{
+
+      },
+      channel: {
+        
+      }
     }
 
   },

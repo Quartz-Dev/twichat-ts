@@ -58,6 +58,10 @@ export type Data = {
         },
         ffz: {
             channel: bttvEmoteList
+        },
+        tvtv: {
+            global: bttvEmoteList,
+            channel: bttvEmoteList
         }
     },
     badges: {

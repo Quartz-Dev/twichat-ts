@@ -34,6 +34,8 @@ export const connect = async (username: string, _chatWebContents: WebContents, _
     let globalBTTVEmotes = await settings.get('global.emotes.bttv')
     let channelBTTVEmotes = await settings.get('channel.emotes.bttv')
     let channelFFZEmotes = await settings.get('channel.emotes.ffz')
+    let globalTVTVEmotes = await settings.get('global.emotes.tvtv')
+    let channelTVTVEmotes = await settings.get('channel.emotes.tvtv')
     let mutedUsers = await settings.get('chat.muted')
 
     let channelname = await settings.get('channel.displayname')
@@ -42,7 +44,7 @@ export const connect = async (username: string, _chatWebContents: WebContents, _
     _mainWebContetnts.send('updateChannelUI', channelname, pfp)
 
     chatWebContents = _chatWebContents
-    chatWebContents.send('updateBadgesEmotesMuted', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, mutedUsers)
+    chatWebContents.send('updateBadgesEmotesMuted', globalTwitchBadges, channelTwitchBadges, globalBTTVEmotes, channelBTTVEmotes, channelFFZEmotes, globalTVTVEmotes, channelTVTVEmotes, mutedUsers)
 
     client = new tmi.Client({
         channels: [username]
