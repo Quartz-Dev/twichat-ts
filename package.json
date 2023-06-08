@@ -3,7 +3,7 @@
   "productName": "twichat",
   "version": "0.1.69",
   "description": "overlay your twitch.tv chat on any app",
-  "main": "./dist/src/main/main.js",
+  "main": "dist/src/main/main.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
