@@ -19,3 +19,7 @@ jobs:
       run: npm run build
     - name: electron-forge build installer
       run: npm run make
+    - name: publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: npm run publish
