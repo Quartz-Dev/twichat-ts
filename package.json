@@ -10,7 +10,8 @@
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "tsc && electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "author": {
     "name": "QarthO",
