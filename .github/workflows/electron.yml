@@ -13,16 +13,16 @@ jobs:
     - uses: actions/setup-node@master
       with:
         node-version: 16.15.0
-    - name: install node dependencies
-      run: npm ci
-    - name: build
-      run: npm run build
+    # - name: install node dependencies
+    #   run: npm ci
+    # - name: build
+    #   run: npm run build
     # - name: electron-forge build installer
     #   run: npm run make
     - name: setup artifact
       run: |
         echo "git_hash=$git_hash" >> $GITHUB_ENV
-        echo "artifactPath=%cd%/out/make/squirrel.windows/x64" >> $GITHUB_ENV
+        echo "artifactPath=${GITHUB_WORKSPACE}/out/make/squirrel.windows/x64" >> $GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.git_hash }} Setup.exe
