@@ -23,7 +23,7 @@ jobs:
     - name: setup artifact
       run: |
         echo ("GIT_HASH=" + $git_hash)  >> $GITHUB_ENV
-        echo ("ARTIFACT_PATH=" + ${GITHUB_WORKSPACE}/out/make/squirrel.windows/x64") >> $env:GITHUB_ENV
+        echo ("ARTIFACT_PATH=" + ${GITHUB_WORKSPACE} + "/out/make/squirrel.windows/x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.git_hash }} Setup.exe
