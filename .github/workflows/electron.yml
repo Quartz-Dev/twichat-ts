@@ -19,13 +19,14 @@ jobs:
     #   run: npm run build
     # - name: electron-forge build installer
     #   run: npm run make
+    #   echo "git_hash=$git_hash" >> $GITHUB_ENV
     - name: setup artifact
       run: |
-        echo "git_hash=$git_hash" >> $GITHUB_ENV
-        echo "artifactPath=${GITHUB_WORKSPACE}/out/make/squirrel.windows/x64" >> $GITHUB_ENV
+        echo ("GIT_HASH=" + $git_hash)  >> $GITHUB_ENV
+        echo ("ARTIFACT_PATH=" + ${GITHUB_WORKSPACE}/out/make/squirrel.windows/x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.git_hash }} Setup.exe
 
         # C:\Users\derek\Documents\Projects\twichat\twichat-ts\out\make\squirrel.windows\x64\twichat-0.1.69 Setup.exe
-        path: ${{ env.artifactPath }}/twichat-0.1.69 Setup.exe
+        path: ${{ env.ARTIFACT_PATH }}/twichat-0.1.69 Setup.exe
