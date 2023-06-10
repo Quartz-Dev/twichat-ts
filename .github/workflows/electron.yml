@@ -10,31 +10,30 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    # - uses: actions/setup-node@master
-    #   with:
-    #    node-version: 16.15.0
-    # - name: install node dependencies
-    #   run: npm ci
-    # - name: build
-    #   run: npm run build
-    # - name: electron-forge build installer
-    #   run: npm run make
-    #   echo "git_hash=$git_hash" >> $GITHUB_ENV
+    - uses: actions/setup-node@master
+      with:
+       node-version: 16.15.0
+    - name: install node dependencies
+      run: npm ci
+    - name: build
+      run: npm run build
+    - name: electron-forge build installer
+      run: npm run make
     - name: Get short SHA
       run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
     - name: Get artifact path
       run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
-      run: echo "APP_VERSION=$(npm pkg get version)" >> $env:GITHUB_ENV
-    - name: Print vars
-      run: |
-        echo "Short SHA is ${{ env.SHORT_SHA }}"
-        echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
-        echo "App version is is ${{ env.APP_VERSION }}"     
+      run: echo "APP_VERSION=$(npm pkg get version).Strip()" >> $env:GITHUB_ENV
+    # - name: Print vars
+    #   run: |
+    #     echo "Short SHA is ${{ env.SHORT_SHA }}"
+    #     echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
+    #     echo "App version is is ${{ env.APP_VERSION }}"     
     - uses: actions/upload-artifact@v3
       with:
-        name: twichat-VERSION-${{ env.GIT_HASH }} Setup.exe
+        name: twichat-${{ env.APP_VERSION }}-${{ env.GIT_HASH }} Setup.exe
 
         # C:\Users\derek\Documents\Projects\twichat\twichat-ts\out\make\squirrel.windows\x64\twichat-0.1.69 Setup.exe
-        path: ${{ env.ARTIFACT_PATH }}\twichat-0.1.69 Setup.exe
+        path: ${{ env.ARTIFACT_PATH }}\twichat-${{ env.APP_VERSION }} Setup.exe
