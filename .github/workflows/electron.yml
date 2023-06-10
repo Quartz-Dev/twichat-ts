@@ -25,7 +25,7 @@ jobs:
       run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
-      run: echo "APP_VERSION=$(npm pkg get version --workspaces=false | tr -d \")" >> $env:GITHUB_ENV
+      run: echo "APP_VERSION=$("npm pkg get version".Replace("`"",""))" >> $env:GITHUB_ENV
     - name: Print vars
       run: |
         echo "Short SHA is ${{ env.SHORT_SHA }}"
