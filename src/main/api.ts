@@ -1,23 +1,34 @@
 import axios from 'axios'
 
-// const api_domain = `https://twichat-api-js.vercel.app`
 const api_domain = `https://api.quartzdev.gg`
 
-function fetch(url: string) {
-    return new Promise((resolve, reject) => {
-        axios.get(url)
-            .then(res => {
-                res.status == 200 ? resolve(res.data) : resolve(false)
-            })
-            .catch(err => {
-                resolve(false)
-            })
-    })
-}
-
-export function fetchData(username: string) {
+export async function fetchData(username: string): Promise<Data> {
     let url = `${api_domain}/twitch/user/${username}`
-    return fetch(url)
+
+    var resData = {} as Data
+
+    return new Promise(async (resolve, reject) => {
+        console.log(`Fetching user info:'${username}' `)
+        await axios.get(url).then(res => {
+            if(res.status == 200) {
+                resData = res.data
+                resData.status = STATUS.SUCCESS
+            }
+            if(res.status == 404){
+                console.log(`    - Error: '${username}' not found`)
+                resData.status = STATUS.USER_NOT_FOUND
+                resData.username = username
+            }
+
+        }).catch( err => {
+            console.log(`    - Error: Failed to fetch. Is the api working?`)
+            resData.status = STATUS.ERROR
+            resData.username = username
+        })
+        console.log("||||||||||||||||||||||||")
+        console.log(resData)
+        resolve(resData)
+    })
 }
 
 export type emoteID = string
@@ -47,6 +58,7 @@ export type bttvEmoteList = {
 
 
 export type Data = {
+    status: STATUS
     username: string,
     displayname: string,
     id: string,
@@ -65,3 +77,9 @@ export type Data = {
         channel: twitchBadgeList 
     }
 }
+
+ export enum STATUS {
+    SUCCESS = 200,
+    USER_NOT_FOUND = 404,
+    ERROR = null,
+} 

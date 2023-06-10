@@ -122,12 +122,21 @@ import * as api from './api'
 
 export function refreshApiData(username: string) {
     return new Promise( async (resolve, reject) => {
-        let userData = (await api.fetchData(username)) as any
-        if(!userData){
+
+        let apiData = await api.fetchData(username)
+        // console.log(`API Data:`)
+        // console.log(apiData)
+
+        if(apiData.status == api.STATUS.USER_NOT_FOUND){
+            console.log(`Error: No user '${username}' found`)
             resolve(false)
-            return
         }
-        await saveChatSettings(userData as api.Data)
+
+        if(apiData.status == api.STATUS.ERROR) {
+            console.log('Error: Failed to pull information from the api')
+            console.log('- Some emotes and Badges might not work')
+        }
+        await saveChatSettings(apiData)
         resolve(true)
     })
 }

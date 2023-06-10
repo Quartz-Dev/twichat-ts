@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, globalShortcut } from "electron"
 import * as path from "path";
 import * as windowStateKeeper from "electron-window-state"
-import Hotkeys from './hotkeys'
+// import Hotkeys from './hotkeys'
 import * as chat from './chat_window';
 import * as config from './config'
 import { channels } from '../shared/constants'
@@ -24,7 +24,7 @@ function handleSquirrelEvent() {
 
   const ChildProcess = require('child_process');
   const path = require('path');
-
+  
   const appFolder = path.resolve(process.execPath, '..');
   const rootAtomFolder = path.resolve(appFolder, '..');
   const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
@@ -160,7 +160,8 @@ app.on("ready", async function () {
   createMainWindow(channelname, pfp, fontSize, opacity, fadeDelay, debug)
   chat.launch(mainWindow.webContents, fontSize, opacity, fadeDelay, debug)
 
-  setupHotkeys()
+  // if(process.platform == "win32")
+  //   setupHotkeys()
 
 });
 
@@ -181,49 +182,49 @@ ipcMain.handle(channels.MINIMIZE_APP, () => {
 
 
 // HOTKEYS
-let hotkeys: Hotkeys
+// let hotkeys: Hotkeys
 
-const setupShowHotkey = async (key_map: number[]) => {
-  hotkeys.register(key_map, chat.toggleShow)
-}
+// const setupShowHotkey = async (key_map: number[]) => {
+//   hotkeys.register(key_map, chat.toggleShow)
+// }
 
-const setupLockHotkey = async (key_map: number[]) => {
-  hotkeys.register(key_map, chat.toggleLock)
-}
+// const setupLockHotkey = async (key_map: number[]) => {
+//   hotkeys.register(key_map, chat.toggleLock)
+// }
 
-const setupScrollUpHotkey = async (key_map: number[]) => {
-  hotkeys.register(key_map, chat.scrollUp)
-}
+// const setupScrollUpHotkey = async (key_map: number[]) => {
+//   hotkeys.register(key_map, chat.scrollUp)
+// }
 
-const setupScrollDownHotkey = async (key_map: number[]) => {
-  hotkeys.register(key_map, chat.scrollDown)
-}
+// const setupScrollDownHotkey = async (key_map: number[]) => {
+//   hotkeys.register(key_map, chat.scrollDown)
+// }
 
-const setupScrollWheelHotkey = async (key_map: number[]) => {
-  hotkeys.registerScroll(key_map, chat.scrollUp, chat.scrollDown)
-}
+// const setupScrollWheelHotkey = async (key_map: number[]) => {
+//   hotkeys.registerScroll(key_map, chat.scrollUp, chat.scrollDown)
+// }
 
-const setupDevToolsHotkey = async (key_map: number[]) => {
-  hotkeys.register(key_map, toggleDevTools)
-}
+// const setupDevToolsHotkey = async (key_map: number[]) => {
+//   hotkeys.register(key_map, toggleDevTools)
+// }
 
-const setupHotkeys = async () => {
-  hotkeys = new Hotkeys()
+// const setupHotkeys = async () => {
+//   hotkeys = new Hotkeys()
   
-  let hotkeyShow = await settings.get('hotkeys.show') as number[]
-  let hotkeyLock = await settings.get('hotkeys.lock') as number[]
-  setupShowHotkey(hotkeyShow)
-  setupLockHotkey(hotkeyLock)
+//   let hotkeyShow = await settings.get('hotkeys.show') as number[]
+//   let hotkeyLock = await settings.get('hotkeys.lock') as number[]
+//   setupShowHotkey(hotkeyShow)
+//   setupLockHotkey(hotkeyLock)
 
-  let hotkeyScrollUp = await settings.get('hotkeys.scrollUp') as number[]
-  let hotkeyScrollDown = await settings.get('hotkeys.scrollDown') as number[]
-  let hotKeyScrollWheel = await settings.get('hotkeys.scrollWheel') as number[]
-  setupScrollUpHotkey(hotkeyScrollUp)
-  setupScrollDownHotkey(hotkeyScrollDown)
-  setupScrollWheelHotkey(hotKeyScrollWheel)
+//   let hotkeyScrollUp = await settings.get('hotkeys.scrollUp') as number[]
+//   let hotkeyScrollDown = await settings.get('hotkeys.scrollDown') as number[]
+//   let hotKeyScrollWheel = await settings.get('hotkeys.scrollWheel') as number[]
+//   setupScrollUpHotkey(hotkeyScrollUp)
+//   setupScrollDownHotkey(hotkeyScrollDown)
+//   setupScrollWheelHotkey(hotKeyScrollWheel)
 
-  let hotKeyDevTools = await settings.get('hotkeys.devTools') as number[]
-  setupDevToolsHotkey(hotKeyDevTools)
+//   let hotKeyDevTools = await settings.get('hotkeys.devTools') as number[]
+//   setupDevToolsHotkey(hotKeyDevTools)
   
-  hotkeys.run()
-}
+//   hotkeys.run()
+// }

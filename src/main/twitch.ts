@@ -13,10 +13,10 @@ export const disconnect = () => {
     return client.disconnect()
 }
 
-//  (channel: string, userstate: tmi.ChatUserstate, message: string, self: boolean)
 export const msgHandler = (channel: string, context: tmi.ChatUserstate, msg: string, self: boolean) => {
 
     if(chatWebContents) chatWebContents.send('addLine', msg, context)
+    else console.log(`Error: Can't find chat window\n - twitch.ts/msgHandler()`)
 }
 
 export const connect = async (username: string, _chatWebContents: WebContents, _mainWebContetnts: WebContents) => {

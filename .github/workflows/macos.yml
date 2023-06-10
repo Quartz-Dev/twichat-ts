@@ -1,24 +1,22 @@
 name: CI
-# this will help you specify where to run 
 on:
   push:
     branches:
       - main
-# this is where the magic happens, each job happens in parallel btw
 jobs:
-  build_on_win:
-    runs-on: windows-latest
+  build_on_mac:
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@master
       with:
        node-version: 16.15.0
-    - name: install node dependencies
-      run: npm ci
-    - name: build
-      run: npm run build
-    - name: electron-forge build installer
-      run: npm run make
+    # - name: install node dependencies
+    #   run: npm ci
+    # - name: build
+    #   run: npm run build
+    # - name: electron-forge build installer
+    #   run: npm run make
     - name: Get short SHA
       run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 7))" >> $env:GITHUB_ENV
     - name: Get artifact path
@@ -32,11 +30,12 @@ jobs:
       run: |
         echo "APP_NAME=$("${{ env.UNFORMATTED_APP_NAME }}".Trim())" >> $env:GITHUB_ENV
         echo "APP_VERSION=$("${{ env.UNFORMATTED_APP_VERSION }}".Trim())" >> $env:GITHUB_ENV
-    # - name: Print vars
-    #   run: |
-    #     echo "Short SHA is ${{ env.SHORT_SHA }}"
-    #     echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
-    #     echo "App version is ${{ env.APP_VERSION }}"     
+    - name: Print vars
+      run: |
+        echo "Short SHA is ${{ env.SHORT_SHA }}"
+        echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
+        echo "App Name is ${{ env.APP_NAME }}" 
+        echo "App version is ${{ env.APP_VERSION }}"     
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ env.APP_NAME }}-${{ env.APP_VERSION }}-${{ env.SHORT_SHA }} Setup.exe
