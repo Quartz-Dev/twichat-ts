@@ -26,12 +26,12 @@ jobs:
       run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
-      run: npm pkg get version
+      run: echo ("APP_VERSION=$(npm pkg get version)" >> $env:GITHUB_ENV
     - name: Print vars
       run: |
         echo "Short SHA is ${{ env.SHORT_SHA }}"
         echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
-        echo "App version is is ${{ env.ARTIFACT_PATH }}"     
+        echo "App version is is ${{ env.APP_VERSION }}"     
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.GIT_HASH }} Setup.exe
