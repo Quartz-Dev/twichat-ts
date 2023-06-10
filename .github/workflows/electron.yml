@@ -10,20 +10,19 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-      with:
-       node-version: 16.15.0
-    - name: install node dependencies
-      run: npm ci
-    - name: build
-      run: npm run build
-    - name: electron-forge build installer
-      run: npm run make
+    # - uses: actions/setup-node@master
+    #   with:
+    #    node-version: 16.15.0
+    # - name: install node dependencies
+    #   run: npm ci
+    # - name: build
+    #   run: npm run build
+    # - name: electron-forge build installer
+    #   run: npm run make
     #   echo "git_hash=$git_hash" >> $GITHUB_ENV
     - name: setup artifact
       run: |
-        echo ("GIT_HASH=" + $git_hash)  >> $GITHUB_ENV
-
+        echo ("GIT_HASH=" + $git_hash)  >> $env:$GITHUB_ENV
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
