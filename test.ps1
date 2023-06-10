@@ -1,1 +1,0 @@
-echo 'APP_VERSION=$("npm pkg get version".Trim('`"'))'
