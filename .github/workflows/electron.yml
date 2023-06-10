@@ -23,7 +23,7 @@ jobs:
     - name: setup artifact
       run: |
         echo "GIT_HASH=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
-        echo ("Test: " + ${{ env.GIT_HASH }}
+        echo ("Test: ${{ env.GIT_HASH }}"
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
