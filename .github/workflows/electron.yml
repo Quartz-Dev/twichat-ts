@@ -20,10 +20,14 @@ jobs:
     # - name: electron-forge build installer
     #   run: npm run make
     #   echo "git_hash=$git_hash" >> $GITHUB_ENV
+    - name: Get short SHA
+      run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
+    - name: Print short SHA
+      run: echo "Short SHA is ${{ env.SHORT_SHA }}"
     - name: setup artifact
       run: |
         echo "GIT_HASH=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
-        echo ("Test: ${{ env.GIT_HASH }}"
+        echo ("Test: ${{ env.GIT_HASH }}")
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
       with:
