@@ -22,13 +22,17 @@ jobs:
     #   echo "git_hash=$git_hash" >> $GITHUB_ENV
     - name: Get short SHA
       run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
-    - name: Print short SHA
-      run: echo "Short SHA is ${{ env.SHORT_SHA }}"
-    - name: setup artifact
-      run: |
-        echo "GIT_HASH=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
-        echo ("Test: ${{ env.GIT_HASH }}")
+    - name: Get artifact path
+      run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
+    - name: Get app version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@v1.3.1
+    - name: Print vars
+      run: |
+        echo "Short SHA is ${{ env.SHORT_SHA }}"
+        echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
+        echo "App version is is ${{ steps.package-version.outputs.current-version }}"     
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.GIT_HASH }} Setup.exe
