@@ -26,7 +26,7 @@ jobs:
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
       run: | 
-        echo 'UNFORMATTED_APP_VERSION=$("npm pkg get version")' >> $env:GITHUB_ENV
+        echo "UNFORMATTED_APP_VERSION=$(npm pkg get version)" >> $env:GITHUB_ENV
         echo 'APP_VERSION=$("${{ github.UNFORMATTED_APP_VERSION }}".Trim('0'))" >> $env:GITHUB_ENV
     - name: Print vars
       run: |
