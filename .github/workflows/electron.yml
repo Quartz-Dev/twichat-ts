@@ -29,7 +29,7 @@ jobs:
         echo "UNFORMATTED_APP_VERSION=$(npm pkg get version)" >> $env:GITHUB_ENV
     - name: Format app version
       run:
-        echo "APP_VERSION=$("${{ env.UNFORMATTED_APP_VERSION }}".Trim('0'))" >> $env:GITHUB_ENV
+        echo "APP_VERSION=$("${{ env.UNFORMATTED_APP_VERSION }}".Trim())" >> $env:GITHUB_ENV
     - name: Print vars
       run: |
         echo "Short SHA is ${{ env.SHORT_SHA }}"
