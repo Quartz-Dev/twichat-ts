@@ -37,7 +37,7 @@ jobs:
     #     echo "App version is ${{ env.APP_VERSION }}"     
     - uses: actions/upload-artifact@v3
       with:
-        name: twichat-${{ env.APP_VERSION }}-${{ env.GIT_HASH }} Setup.exe
+        name: twichat-${{ env.APP_VERSION }}-${{ env.SHORT_SHA }} Setup.exe
 
         # C:\Users\derek\Documents\Projects\twichat\twichat-ts\out\make\squirrel.windows\x64\twichat-0.1.69 Setup.exe
         path: ${{ env.ARTIFACT_PATH }}\twichat-${{ env.APP_VERSION }} Setup.exe
