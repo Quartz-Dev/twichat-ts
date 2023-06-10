@@ -26,15 +26,12 @@ jobs:
       run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
-    - uses: avides/actions-project-version-check@v1.4.0
-    - with:
-      token: ${{ secrets.GITHUB_TOKEN }}
-      file-to-check: package.json
+      run: echo npm pkg get version
     - name: Print vars
       run: |
         echo "Short SHA is ${{ env.SHORT_SHA }}"
         echo "Artifact path is ${{ env.ARTIFACT_PATH }}"
-        echo "App version is is ${{ steps.package-version.outputs.current-version }}"     
+        echo "App version is is ${{ env.ARTIFACT_PATH }}"     
     - uses: actions/upload-artifact@v3
       with:
         name: twichat-VERSION-${{ env.GIT_HASH }} Setup.exe
