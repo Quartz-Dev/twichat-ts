@@ -26,8 +26,10 @@ jobs:
       run: 
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - name: Get app version
-      id: package-version
-      uses: martinbeentjes/npm-get-version-action@v1.3.1
+      - uses: avides/actions-project-version-check@v1.4.0
+      - with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        file-to-check: package.json
     - name: Print vars
       run: |
         echo "Short SHA is ${{ env.SHORT_SHA }}"
