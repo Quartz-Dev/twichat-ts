@@ -22,7 +22,8 @@ jobs:
     #   echo "git_hash=$git_hash" >> $GITHUB_ENV
     - name: setup artifact
       run: |
-        echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $env:GITHUB_ENV
+        echo "GIT_SHA=${{ github.sha }}"
+        echo "GIT_HASH=%GIT_SHA:~0.7%" >> $env:GITHUB_ENV
         echo ("Test: " + ${{ env.GIT_HASH }}
         echo ("ARTIFACT_PATH=${{ github.workspace }}\out\make\squirrel.windows\x64") >> $env:GITHUB_ENV
     - uses: actions/upload-artifact@v3
